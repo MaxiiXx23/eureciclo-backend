@@ -1,0 +1,10 @@
+version: '3'
+services:
+  eureciclo:
+    image: bitnami/postgresql
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRESQL_USERNAME=eureciclo
+      - POSTGRESQL_PASSWORD=123456eureciclo
+      - POSTGRESQL_DATABASE=eureciclo
