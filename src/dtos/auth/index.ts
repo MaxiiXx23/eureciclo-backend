@@ -4,7 +4,10 @@ interface IPayloadTokenJWT {
   lastName: string
   email: string
   typeUserId: number
-  companyId: number | null
+  businesses: {
+    id: number
+    createdAt: Date
+  } | null
 }
 
 export { IPayloadTokenJWT }

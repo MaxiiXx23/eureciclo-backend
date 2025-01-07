@@ -18,12 +18,12 @@ interface TCompany {
 interface TCreateCompany {
   docIdentification: string
   fantasyName: string
-  corporateReason: string
-  phone: string
+  corporateReason?: string
+  phone?: string
   email: string
-  type: number
-  description: string
-  occupationAreaId: number
+  type?: number
+  description?: string
+  occupationAreaId?: number
 }
 
 interface TUpdateInfosCompany {

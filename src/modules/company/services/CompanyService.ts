@@ -36,13 +36,6 @@ export class CompanyService {
       throw new Error('Empresa já existente.')
     }
 
-    const hasOccupationArea =
-      await this.companyRepository.getOccupationAreaById(data.occupationAreaId)
-
-    if (!hasOccupationArea) {
-      throw new Error('Área de ocupação da empresa não encontrada.')
-    }
-
     const companyCreated = await this.companyRepository.create(data)
 
     return {

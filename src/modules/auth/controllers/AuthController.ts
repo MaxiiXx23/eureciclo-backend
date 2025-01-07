@@ -3,6 +3,7 @@ import { NextFunction, Request, Response } from 'express'
 import { AuthUseCase } from '../useCases/AuthUseCase'
 import { TAuthCredentials } from '@/@types/TUserAuth'
 import { TUserRegister } from '@/@types/TUser'
+import { ICreateUserAndCompany } from '@/interfaces/auth'
 
 export class AuthController {
   async auth(
@@ -73,6 +74,32 @@ export class AuthController {
       const payload: TUserRegister = req.body
 
       await authUseCase.register(payload)
+
+      return res.status(201).json({
+        message: 'Sua conta foi criada com sucesso.',
+      })
+    } catch (error) {
+      if (error instanceof Error) {
+        return res.status(500).json({
+          message: error.message,
+        })
+      }
+
+      return next(error)
+    }
+  }
+
+  async registerUserAndCompany(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<Response | void> {
+    try {
+      const authUseCase = new AuthUseCase()
+
+      const payload: ICreateUserAndCompany = req.body
+
+      await authUseCase.registerUserAndCompany(payload)
 
       return res.status(201).json({
         message: 'Sua conta foi criada com sucesso.',

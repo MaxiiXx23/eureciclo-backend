@@ -34,7 +34,10 @@ export class AuthService {
         firstName: hasUser.firstName,
         lastName: hasUser.lastName,
         typeUserId: hasUser.typeUserId,
-        companyId: hasUser.userCompany[0].companyId,
+        businesses: {
+          id: hasUser.userCompany[0].companyId,
+          createdAt: hasUser.userCompany[0].createdAt,
+        },
       }
 
       const token = await generateTokenProvider.token(payload)
@@ -51,7 +54,7 @@ export class AuthService {
         firstName: hasUser.firstName,
         lastName: hasUser.lastName,
         typeUserId: hasUser.typeUserId,
-        companyId: null,
+        businesses: null,
       }
 
       const token = await generateTokenProvider.token(payload)

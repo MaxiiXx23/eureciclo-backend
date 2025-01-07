@@ -18,6 +18,9 @@ async function initialSeed() {
       {
         type: 'collector',
       },
+      {
+        type: 'business',
+      },
     ]
 
     const occupationAreaCompany = [
@@ -45,13 +48,21 @@ async function initialSeed() {
       typeUserId: 1,
     }
 
-    Promise.all(
-      typeUsers.map(async (item) => {
-        await prisma.typeUser.create({
-          data: item,
-        })
-      }),
-    )
+    await prisma.typeUser.create({
+      data: typeUsers[1],
+    })
+
+    await prisma.typeUser.create({
+      data: typeUsers[2],
+    })
+
+    await prisma.typeUser.create({
+      data: typeUsers[0],
+    })
+
+    await prisma.typeUser.create({
+      data: typeUsers[3],
+    })
 
     Promise.all(
       occupationAreaCompany.map(async (item) => {
@@ -71,4 +82,59 @@ async function initialSeed() {
   }
 }
 
+async function statusSubscriptionSeed() {
+  try {
+    const status = [
+      {
+        name: 'Ativo',
+        color: '#10B981',
+      },
+      {
+        name: 'Expirado',
+        color: '#FACC15',
+      },
+      {
+        name: 'Cancelado',
+        color: '#DC2626',
+      },
+    ]
+
+    await prisma.statusSubscription.create({
+      data: status[0],
+    })
+
+    await prisma.statusSubscription.create({
+      data: status[1],
+    })
+
+    await prisma.statusSubscription.create({
+      data: status[2],
+    })
+
+    console.log('Seed done with successfully!')
+  } catch (error) {
+    console.log(`Error on seed: ${error}`)
+  }
+}
+
+async function planSeed() {
+  try {
+    await prisma.plans.create({
+      data: {
+        name: 'Plano Empresa',
+        description:
+          'Plano Empresa te oferece todas as funcionalidades para o seu negócio.',
+        price: 59.9,
+        durationDays: 30,
+      },
+    })
+
+    console.log('Seed done with successfully!')
+  } catch (error) {
+    console.log(`Error on seed: ${error}`)
+  }
+}
+
 initialSeed()
+statusSubscriptionSeed()
+planSeed()

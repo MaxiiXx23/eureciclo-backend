@@ -15,7 +15,7 @@ model User {
   firstName         String
   lastName          String
   description       String
-  phone             String
+  phone             String?
   docIdentification String
   DateOfBirth       String
   status            Boolean        @default(true)
@@ -30,22 +30,23 @@ model User {
 }
 
 model Company {
-  id                Int            @id @default(autoincrement())
+  id                Int             @id @default(autoincrement())
   docIdentification String
   fantasyName       String
-  corporateReason   String
-  phone             String
+  corporateReason   String?
+  phone             String?
   email             String
-  status            Boolean        @default(true)
-  type              Int            @default(1)
-  description       String
-  occupationAreaId  Int
-  createdAt         DateTime       @default(now())
-  updatedAt         DateTime       @updatedAt
+  status            Boolean         @default(true)
+  type              Int             @default(1)
+  description       String?
+  occupationAreaId  Int?
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
   profileImage      ProfileImage[]
   userCompany       UserCompany[]
   address           Address[]
-  occupationArea    OccupationArea @relation(fields: [occupationAreaId], references: [id], onDelete: Cascade)
+  occupationArea    OccupationArea? @relation(fields: [occupationAreaId], references: [id], onDelete: Cascade)
+  Subscription      Subscription[]
 }
 
 model UserCompany {
@@ -109,4 +110,38 @@ model RefreshToken {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   user      User?    @relation(fields: [userId], references: [id])
+}
+
+model Plans {
+  id           Int            @id @default(autoincrement())
+  name         String
+  description  String
+  price        Float
+  durationDays Int
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  Subscription Subscription[]
+}
+
+model StatusSubscription {
+  id           Int            @id @default(autoincrement())
+  name         String
+  color        String
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  Subscription Subscription[]
+}
+
+model Subscription {
+  id                   Int                @id @default(autoincrement())
+  startDate            DateTime
+  endDate              DateTime
+  statusSubscriptionId Int
+  companyId            Int
+  planId               Int
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+  statusSubscription   StatusSubscription @relation(fields: [statusSubscriptionId], references: [id], onDelete: Cascade)
+  companies            Company            @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  plans                Plans              @relation(fields: [planId], references: [id], onDelete: Cascade)
 }
