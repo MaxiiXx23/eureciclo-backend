@@ -27,6 +27,8 @@ model User {
   userCompany       UserCompany[]
   address           Address[]
   refreshToken      RefreshToken[]
+  Collect           Collect[]
+  CollectBy         CollectBy[]
 }
 
 model Company {
@@ -47,6 +49,7 @@ model Company {
   address           Address[]
   occupationArea    OccupationArea? @relation(fields: [occupationAreaId], references: [id], onDelete: Cascade)
   Subscription      Subscription[]
+  CollectBy         CollectBy[]
 }
 
 model UserCompany {
@@ -89,18 +92,20 @@ model ProfileImage {
 }
 
 model Address {
-  id         Int      @id @default(autoincrement())
-  cep        String
-  street     String
-  complement String
-  district   String
-  city       String
-  state      String
-  country    String
-  userId     Int
-  companyId  Int
-  user       User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  company    Company? @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  id             Int              @id @default(autoincrement())
+  cep            String
+  street         String
+  complement     String
+  district       String
+  city           String
+  state          String
+  country        String
+  userId         Int
+  companyId      Int
+  user           User?            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  company        Company?         @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  AddressCollect AddressCollect[]
+  Collect        Collect[]
 }
 
 model RefreshToken {
@@ -144,4 +149,73 @@ model Subscription {
   statusSubscription   StatusSubscription @relation(fields: [statusSubscriptionId], references: [id], onDelete: Cascade)
   companies            Company            @relation(fields: [companyId], references: [id], onDelete: Cascade)
   plans                Plans              @relation(fields: [planId], references: [id], onDelete: Cascade)
+}
+
+model StatusCollect {
+  id        Int       @id @default(autoincrement())
+  name      String
+  color     String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  Collect   Collect[]
+}
+
+model Collect {
+  id              Int       @id @default(autoincrement())
+  description     String
+  code            String
+  collectedAt     DateTime?
+  receivedAt      DateTime?
+  userId          Int
+  addressId       Int
+  statusCollectId Int
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  statusCollect StatusCollect @relation(fields: [statusCollectId], references: [id], onDelete: Cascade)
+  addresses     Address       @relation(fields: [addressId], references: [id], onDelete: Cascade)
+
+  CollectBy      CollectBy[]
+  AddressCollect AddressCollect[]
+  ImagesCollect  ImagesCollect[]
+}
+
+model CollectBy {
+  id          Int      @id @default(autoincrement())
+  collectId   Int
+  collectorId Int?
+  companyId   Int?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  collector User?    @relation(fields: [collectorId], references: [id], onDelete: Cascade)
+  companies Company? @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  collects  Collect  @relation(fields: [collectId], references: [id], onDelete: Cascade)
+}
+
+model AddressCollect {
+  id        Int      @id @default(autoincrement())
+  type      Int // '1' para "Coletado" em E '2' para "Entregue em"
+  collectId Int
+  addressId Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  addresses Address @relation(fields: [addressId], references: [id], onDelete: Cascade)
+  collects  Collect @relation(fields: [collectId], references: [id], onDelete: Cascade)
+}
+
+model ImagesCollect {
+  id   Int    @id @default(autoincrement())
+  url  String
+  size Int
+  type String
+
+  collectId Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  collects Collect @relation(fields: [collectId], references: [id], onDelete: Cascade)
 }

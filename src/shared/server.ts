@@ -3,15 +3,17 @@ import http from 'http'
 
 import { Server } from 'socket.io'
 import { appRouter } from './routes'
+import path from 'path'
+import url from 'url'
 
 const app = express()
 const port = process.env.PORT || 3000
 
-// const currentPath = url.fileURLToPath(import.meta.url)
-// const publicDir = path.join(currentPath, '../..', 'public')
+const currentPath = url.fileURLToPath(import.meta.url)
+const publicDir = path.join(currentPath, '../..', 'tmp')
 
 app.use(express.json())
-// app.use(express.static(publicDir))
+app.use(express.static(publicDir))
 app.get('/', (req, res) => {
   return res.status(200).json({
     message: 'API is running!',
