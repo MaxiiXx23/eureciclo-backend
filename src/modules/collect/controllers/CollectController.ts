@@ -17,10 +17,11 @@ export class CollectController {
     try {
       // Utilizando Parse para converter o Text da request para JSON em uma mesma requisição com FIle e JSON (Form-data)
       const body: IRequestCreateCollect = JSON.parse(req.body.data)
-
+      const { file } = req
       const { id } = req.userAuth
 
       const payload: IRequestCreateCollect = {
+        file: file!,
         description: body.description,
         addressId: body.addressId,
         statusCollectId: body.statusCollectId,

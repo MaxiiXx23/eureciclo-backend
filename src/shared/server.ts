@@ -10,10 +10,10 @@ const app = express()
 const port = process.env.PORT || 3000
 
 const currentPath = url.fileURLToPath(import.meta.url)
-const publicDir = path.join(currentPath, '../..', 'tmp')
+const publicDir = path.join(currentPath, '../..', 'tmp/uploads')
 
 app.use(express.json())
-app.use(express.static(publicDir))
+app.use('/imagens', express.static(publicDir))
 app.get('/', (req, res) => {
   return res.status(200).json({
     message: 'API is running!',
