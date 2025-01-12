@@ -18,4 +18,8 @@ collectRouter.post(
   controllers.collectController.create,
 )
 
+collectRouter.get('/info', controllers.collectController.getCollectById)
+
+collectRouter.get('/list/user', controllers.collectController.getCollectsByUser)
+
 export { collectRouter }

@@ -1,6 +1,9 @@
 import { Request, Response, NextFunction } from 'express'
 import { CollectUseCase } from '../useCases/CollectUseCase'
-import { IRequestCreateCollect } from '@/interfaces/collect/request'
+import {
+  IRequestCreateCollect,
+  IRequestGetCollectsByUser,
+} from '@/interfaces/collect/request'
 
 export class CollectController {
   private collectUseCase: CollectUseCase
@@ -32,6 +35,70 @@ export class CollectController {
 
       return res.status(201).json({
         message: 'Collect registrada com sucesso.',
+      })
+    } catch (error) {
+      if (error instanceof Error) {
+        return res.status(500).json({
+          message: 'Erro inesperado. Por favor, recarregue novamente a página.',
+        })
+      }
+
+      return next(error)
+    }
+  }
+
+  getCollectById = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<Response | void> => {
+    try {
+      const { id } = req.query
+
+      const { data } = await this.collectUseCase.getCollectById(Number(id))
+
+      return res.status(201).json({
+        collect: data,
+        message: 'Informações resgatadas com sucesso.',
+      })
+    } catch (error) {
+      if (error instanceof Error) {
+        return res.status(500).json({
+          message: 'Erro inesperado. Por favor, recarregue novamente a página.',
+        })
+      }
+
+      return next(error)
+    }
+  }
+
+  getCollectsByUser = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<Response | void> => {
+    try {
+      const { page, perPage, status, search } = req.query
+      const { id } = req.userAuth
+
+      const payload: IRequestGetCollectsByUser = {
+        id,
+        page: Number(page),
+        perPage: Number(perPage),
+        search: String(search),
+        status: Number(status),
+      }
+
+      const { collects, maxPage, rows, totalRows } =
+        await this.collectUseCase.getCollectsByUser(payload)
+
+      return res.status(201).json({
+        collects,
+        currentPage: Number(page),
+        maxPage,
+        rows,
+        totalRows,
+        message: 'Informações resgatadas com sucesso.',
       })
     } catch (error) {
       if (error instanceof Error) {

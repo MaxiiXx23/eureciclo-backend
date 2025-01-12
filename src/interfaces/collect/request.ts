@@ -1,7 +1,13 @@
 import { TCreateCollect } from '@/@types/TCollect'
+import { IRequestPagination } from '../globals'
 
 interface IRequestCreateCollect extends Omit<TCreateCollect, 'code'> {
   file: Express.Multer.File
 }
 
-export { IRequestCreateCollect }
+interface IRequestGetCollectsByUser extends Omit<IRequestPagination, 'status'> {
+  id: number
+  status: number
+}
+
+export { IRequestCreateCollect, IRequestGetCollectsByUser }
