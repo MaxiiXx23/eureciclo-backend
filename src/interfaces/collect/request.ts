@@ -10,4 +10,13 @@ interface IRequestGetCollectsByUser extends Omit<IRequestPagination, 'status'> {
   status: number
 }
 
-export { IRequestCreateCollect, IRequestGetCollectsByUser }
+interface IRequestGetCollectsByCollector
+  extends Omit<IRequestPagination, 'status'> {
+  status: number
+}
+
+export {
+  IRequestCreateCollect,
+  IRequestGetCollectsByUser,
+  IRequestGetCollectsByCollector,
+}

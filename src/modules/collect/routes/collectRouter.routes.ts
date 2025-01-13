@@ -21,5 +21,9 @@ collectRouter.post(
 collectRouter.get('/info', controllers.collectController.getCollectById)
 
 collectRouter.get('/list/user', controllers.collectController.getCollectsByUser)
+collectRouter.get(
+  '/list/collector-search',
+  controllers.collectController.getCollectsToCollector,
+)
 
 export { collectRouter }

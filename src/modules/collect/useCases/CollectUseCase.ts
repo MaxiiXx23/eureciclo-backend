@@ -2,6 +2,7 @@ import { PrismaCollectRepository } from '@/shared/repositories/collect/prisma/Pr
 import { CollectService } from '../services/CollectService'
 import {
   IRequestCreateCollect,
+  IRequestGetCollectsByCollector,
   IRequestGetCollectsByUser,
 } from '@/interfaces/collect/request'
 import { PrismaImagesCollectRepository } from '@/shared/repositories/imagesCollect/prisma/PrismaImagesCollectRepository'
@@ -33,5 +34,9 @@ export class CollectUseCase {
 
   async getCollectsByUser(data: IRequestGetCollectsByUser) {
     return await this.collectService.getCollectsByUser(data)
+  }
+
+  async getCollectsToCollector(data: IRequestGetCollectsByCollector) {
+    return await this.collectService.getCollectsToCollector(data)
   }
 }

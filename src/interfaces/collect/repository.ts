@@ -5,4 +5,8 @@ interface IGetCollectsByUser extends Omit<IPagination, 'status'> {
   status: number
 }
 
-export { IGetCollectsByUser }
+interface IGetCollectsByCollector extends Omit<IPagination, 'status'> {
+  status: number
+}
+
+export { IGetCollectsByUser, IGetCollectsByCollector }

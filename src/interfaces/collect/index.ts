@@ -24,7 +24,7 @@ export interface IGetInfoCollect {
     cep: string
     street: string
     number: string
-    complement: string
+    complement: string | null
     district: string
     city: string
     state: string

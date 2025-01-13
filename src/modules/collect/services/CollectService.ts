@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { ICollectRepository } from '@/shared/repositories/collect/ICollectRepository'
 import {
   IRequestCreateCollect,
+  IRequestGetCollectsByCollector,
   IRequestGetCollectsByUser,
 } from '@/interfaces/collect/request'
 import { TCreateCollect } from '@/@types/TCollect'
@@ -87,5 +88,38 @@ export class CollectService {
   }
 
   // buscar de coletas por Endereço(região)
-  async getCollectsToCollector() {}
+  async getCollectsToCollector({
+    page,
+    perPage,
+    status,
+    ordernation,
+    search,
+  }: IRequestGetCollectsByCollector) {
+    const offset = (page - 1) * perPage
+
+    const list = await this.collectRepository.getCollectsByCollector({
+      offset,
+      perPage,
+      status,
+      ordernation,
+      search,
+    })
+
+    const totalRows =
+      await this.collectRepository.getTotalRowsCollectsByCollector(
+        status,
+        search,
+      )
+
+    const hydrated = hydrateGetListCollectByUser(list)
+
+    const maxPage = Math.ceil(totalRows / perPage)
+
+    return {
+      collects: hydrated,
+      rows: hydrated.length,
+      maxPage,
+      totalRows,
+    }
+  }
 }
