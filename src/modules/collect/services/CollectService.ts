@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { ICollectRepository } from '@/shared/repositories/collect/ICollectRepository'
 import {
   IRequestCreateCollect,
+  IRequestCreateInProgressByCollector,
   IRequestGetCollectsByCollector,
   IRequestGetCollectsByUser,
 } from '@/interfaces/collect/request'
@@ -38,6 +39,20 @@ export class CollectService {
 
   async getCollectById(id: number) {
     const collect = await this.collectRepository.getById(id)
+
+    if (!collect) {
+      throw new Error('Informações sobre a coleta não encontra.')
+    }
+
+    const data = mapperCollectGetById(collect)
+
+    return {
+      data,
+    }
+  }
+
+  async getInProgressByUserId(id: number) {
+    const collect = await this.collectRepository.getInProgressByUserId(id)
 
     if (!collect) {
       throw new Error('Informações sobre a coleta não encontra.')
@@ -121,5 +136,14 @@ export class CollectService {
       maxPage,
       totalRows,
     }
+  }
+
+  async createInProgressByCollector(data: IRequestCreateInProgressByCollector) {
+    await this.collectRepository.createInProgressByCollector(data)
+
+    await this.collectRepository.patchStatusCollect({
+      id: data.id,
+      statusCollectId: 3,
+    })
   }
 }

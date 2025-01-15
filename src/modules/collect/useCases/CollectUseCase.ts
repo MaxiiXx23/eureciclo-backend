@@ -2,6 +2,7 @@ import { PrismaCollectRepository } from '@/shared/repositories/collect/prisma/Pr
 import { CollectService } from '../services/CollectService'
 import {
   IRequestCreateCollect,
+  IRequestCreateInProgressByCollector,
   IRequestGetCollectsByCollector,
   IRequestGetCollectsByUser,
 } from '@/interfaces/collect/request'
@@ -32,11 +33,19 @@ export class CollectUseCase {
     return await this.collectService.getCollectById(id)
   }
 
+  async getInProgressByUserId(id: number) {
+    return await this.collectService.getInProgressByUserId(id)
+  }
+
   async getCollectsByUser(data: IRequestGetCollectsByUser) {
     return await this.collectService.getCollectsByUser(data)
   }
 
   async getCollectsToCollector(data: IRequestGetCollectsByCollector) {
     return await this.collectService.getCollectsToCollector(data)
+  }
+
+  async createInProgressByCollector(data: IRequestCreateInProgressByCollector) {
+    return await this.collectService.createInProgressByCollector(data)
   }
 }

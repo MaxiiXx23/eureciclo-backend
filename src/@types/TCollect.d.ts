@@ -18,3 +18,8 @@ export interface TCreateCollect {
   addressId: number
   statusCollectId: number
 }
+
+export interface TPatchInProcessCollectById {
+  id: number
+  statusCollectId: number
+}

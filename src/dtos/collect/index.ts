@@ -23,12 +23,17 @@ export interface IGetInfoCollectDTO {
     cep: string
     street: string
     number: string
-    complement: string
+    complement: string | null
     district: string
     city: string
     state: string
     country: string
   }
+  collector: {
+    id: number
+    name: string
+    createdAt: string
+  } | null
 }
 
 export interface IGetListCollectsByUserDTO {

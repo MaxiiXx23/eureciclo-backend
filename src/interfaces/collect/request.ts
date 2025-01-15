@@ -15,8 +15,14 @@ interface IRequestGetCollectsByCollector
   status: number
 }
 
+interface IRequestCreateInProgressByCollector {
+  id: number
+  collectorId: number
+}
+
 export {
   IRequestCreateCollect,
   IRequestGetCollectsByUser,
   IRequestGetCollectsByCollector,
+  IRequestCreateInProgressByCollector,
 }

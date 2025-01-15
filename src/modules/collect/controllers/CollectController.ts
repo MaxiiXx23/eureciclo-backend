@@ -48,6 +48,34 @@ export class CollectController {
     }
   }
 
+  createInProgressByCollector = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<Response | void> => {
+    try {
+      const { id: collectorId } = req.userAuth
+      const { id } = req.query
+
+      await this.collectUseCase.createInProgressByCollector({
+        id: Number(id),
+        collectorId,
+      })
+
+      return res.status(201).json({
+        message: 'Coleta em processo!',
+      })
+    } catch (error) {
+      if (error instanceof Error) {
+        return res.status(500).json({
+          message: 'Erro inesperado. Por favor, recarregue novamente a página.',
+        })
+      }
+
+      return next(error)
+    }
+  }
+
   getCollectById = async (
     req: Request,
     res: Response,
@@ -58,7 +86,32 @@ export class CollectController {
 
       const { data } = await this.collectUseCase.getCollectById(Number(id))
 
-      return res.status(201).json({
+      return res.status(200).json({
+        collect: data,
+        message: 'Informações resgatadas com sucesso.',
+      })
+    } catch (error) {
+      if (error instanceof Error) {
+        return res.status(500).json({
+          message: 'Erro inesperado. Por favor, recarregue novamente a página.',
+        })
+      }
+
+      return next(error)
+    }
+  }
+
+  getInProgressByUserId = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<Response | void> => {
+    try {
+      const { id } = req.userAuth
+
+      const { data } = await this.collectUseCase.getInProgressByUserId(id)
+
+      return res.status(200).json({
         collect: data,
         message: 'Informações resgatadas com sucesso.',
       })
@@ -93,7 +146,7 @@ export class CollectController {
       const { collects, maxPage, rows, totalRows } =
         await this.collectUseCase.getCollectsByUser(payload)
 
-      return res.status(201).json({
+      return res.status(200).json({
         collects,
         currentPage: Number(page),
         maxPage,
@@ -130,7 +183,7 @@ export class CollectController {
       const { collects, maxPage, rows, totalRows } =
         await this.collectUseCase.getCollectsToCollector(payload)
 
-      return res.status(201).json({
+      return res.status(200).json({
         collects,
         currentPage: Number(page),
         maxPage,

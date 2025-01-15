@@ -1,6 +1,10 @@
 import { prismaProvider } from '@/shared/providers'
 
-import { TCollect, TCreateCollect } from '@/@types/TCollect'
+import {
+  TCollect,
+  TCreateCollect,
+  TPatchInProcessCollectById,
+} from '@/@types/TCollect'
 import { ICollectRepository } from '../ICollectRepository'
 import { IGetInfoCollect, IGetListCollectsByUser } from '@/interfaces/collect'
 
@@ -8,6 +12,7 @@ import {
   IGetCollectsByCollector,
   IGetCollectsByUser,
 } from '@/interfaces/collect/repository'
+import { IRequestCreateInProgressByCollector } from '@/interfaces/collect/request'
 
 export class PrismaCollectRepository implements ICollectRepository {
   async create(data: TCreateCollect): Promise<TCollect> {
@@ -66,6 +71,90 @@ export class PrismaCollectRepository implements ICollectRepository {
               country: true,
             },
           },
+          CollectBy: {
+            select: {
+              collector: {
+                select: {
+                  id: true,
+                  firstName: true,
+                  lastName: true,
+                  createdAt: true,
+                },
+              },
+            },
+          },
+        },
+      }),
+    )
+
+    return data
+  }
+
+  async getInProgressByUserId(id: number): Promise<IGetInfoCollect | null> {
+    const data = await prismaProvider.queryDatabase((prisma) =>
+      prisma.collect.findFirst({
+        where: {
+          userId: id,
+          OR: [
+            {
+              statusCollectId: {
+                in: [4, 3],
+              },
+            },
+          ],
+        },
+        select: {
+          id: true,
+          code: true,
+          description: true,
+          receivedAt: true,
+          collectedAt: true,
+          createdAt: true,
+          statusCollect: {
+            select: {
+              id: true,
+              name: true,
+              color: true,
+            },
+          },
+          ImagesCollect: {
+            select: {
+              id: true,
+              url: true,
+            },
+          },
+          user: {
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+            },
+          },
+          addresses: {
+            select: {
+              id: true,
+              cep: true,
+              street: true,
+              number: true,
+              complement: true,
+              district: true,
+              city: true,
+              state: true,
+              country: true,
+            },
+          },
+          CollectBy: {
+            select: {
+              collector: {
+                select: {
+                  id: true,
+                  firstName: true,
+                  lastName: true,
+                  createdAt: true,
+                },
+              },
+            },
+          },
         },
       }),
     )
@@ -77,15 +166,14 @@ export class PrismaCollectRepository implements ICollectRepository {
     id,
     offset,
     perPage,
-    status,
-    ordernation,
+    // status,
+    // ordernation,
     search,
   }: IGetCollectsByUser): Promise<IGetListCollectsByUser[]> {
     const list = await prismaProvider.queryDatabase((prisma) =>
       prisma.collect.findMany({
         where: {
           userId: id,
-          statusCollectId: status,
           ...(search && {
             OR: [
               {
@@ -108,7 +196,7 @@ export class PrismaCollectRepository implements ICollectRepository {
           },
         },
         orderBy: {
-          createdAt: ordernation,
+          createdAt: 'desc',
         },
         skip: offset,
         take: perPage,
@@ -127,7 +215,6 @@ export class PrismaCollectRepository implements ICollectRepository {
       prisma.collect.count({
         where: {
           userId: id,
-          statusCollectId: status,
           ...(search && {
             OR: [
               {
@@ -149,7 +236,7 @@ export class PrismaCollectRepository implements ICollectRepository {
     offset,
     perPage,
     status,
-    ordernation,
+    // ordernation,
     search,
   }: IGetCollectsByCollector): Promise<IGetListCollectsByUser[]> {
     const list = await prismaProvider.queryDatabase((prisma) =>
@@ -194,7 +281,7 @@ export class PrismaCollectRepository implements ICollectRepository {
           },
         },
         orderBy: {
-          createdAt: ordernation,
+          createdAt: 'desc',
         },
         skip: offset,
         take: perPage,
@@ -243,5 +330,34 @@ export class PrismaCollectRepository implements ICollectRepository {
     )
 
     return totalRows
+  }
+
+  async createInProgressByCollector(
+    data: IRequestCreateInProgressByCollector,
+  ): Promise<void> {
+    await prismaProvider.queryDatabase((prisma) =>
+      prisma.collectBy.create({
+        data: {
+          collectId: data.id,
+          collectorId: data.collectorId,
+        },
+      }),
+    )
+  }
+
+  async patchStatusCollect({
+    id,
+    statusCollectId,
+  }: TPatchInProcessCollectById): Promise<void> {
+    await prismaProvider.queryDatabase((prisma) =>
+      prisma.collect.update({
+        where: {
+          id,
+        },
+        data: {
+          statusCollectId,
+        },
+      }),
+    )
   }
 }

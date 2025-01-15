@@ -19,11 +19,20 @@ collectRouter.post(
 )
 
 collectRouter.get('/info', controllers.collectController.getCollectById)
+collectRouter.get(
+  '/info/in-progress',
+  controllers.collectController.getInProgressByUserId,
+)
 
 collectRouter.get('/list/user', controllers.collectController.getCollectsByUser)
 collectRouter.get(
   '/list/collector-search',
   controllers.collectController.getCollectsToCollector,
+)
+
+collectRouter.post(
+  '/create/in-progress',
+  controllers.collectController.createInProgressByCollector,
 )
 
 export { collectRouter }

@@ -30,6 +30,14 @@ export interface IGetInfoCollect {
     state: string
     country: string
   }
+  CollectBy: {
+    collector: {
+      id: number
+      firstName: string
+      lastName: string
+      createdAt: Date
+    } | null
+  }[]
 }
 
 export interface IGetListCollectsByUser {

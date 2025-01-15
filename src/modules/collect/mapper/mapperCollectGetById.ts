@@ -28,6 +28,16 @@ export function mapperCollectGetById(
       url: `${services.url}/imagens/${data.ImagesCollect[0].url}`,
     },
     addresses: data.addresses,
+    collector:
+      data.CollectBy.length === 0
+        ? null
+        : {
+            id: data.CollectBy[0].collector!.id,
+            name: `${data.CollectBy[0].collector!.firstName} ${data.CollectBy[0].collector!.lastName}`,
+            createdAt: dayjs(data.CollectBy[0].collector?.createdAt).format(
+              'DD/MM/YYYY',
+            ),
+          },
   }
 
   return dataDTO

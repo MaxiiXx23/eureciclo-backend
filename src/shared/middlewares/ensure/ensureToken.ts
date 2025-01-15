@@ -26,8 +26,9 @@ export async function ensureToken(
   const [, token] = authToken.split(' ')
 
   try {
+    const tokenReplaced = token.replace('"', '').replace('"', '')
     const tokenDecoded = jwt.verify(
-      token,
+      tokenReplaced,
       auth.secret_key_JWT,
     ) as IPayloadTokenJWT
 
