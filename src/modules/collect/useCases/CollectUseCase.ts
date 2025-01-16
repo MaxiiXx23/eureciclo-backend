@@ -5,6 +5,7 @@ import {
   IRequestCreateInProgressByCollector,
   IRequestGetCollectsByCollector,
   IRequestGetCollectsByUser,
+  IRequestGetCollectsInProcessByCollector,
 } from '@/interfaces/collect/request'
 import { PrismaImagesCollectRepository } from '@/shared/repositories/imagesCollect/prisma/PrismaImagesCollectRepository'
 import { ImagesCollectService } from '@/modules/imagesCollect/services/ImagesCollectService'
@@ -43,6 +44,12 @@ export class CollectUseCase {
 
   async getCollectsToCollector(data: IRequestGetCollectsByCollector) {
     return await this.collectService.getCollectsToCollector(data)
+  }
+
+  async getCollectsInProcessByCollector(
+    data: IRequestGetCollectsInProcessByCollector,
+  ) {
+    return await this.collectService.getCollectsInProcessByCollector(data)
   }
 
   async createInProgressByCollector(data: IRequestCreateInProgressByCollector) {

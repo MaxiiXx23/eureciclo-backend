@@ -6,7 +6,16 @@ interface IGetCollectsByUser extends Omit<IPagination, 'status'> {
 }
 
 interface IGetCollectsByCollector extends Omit<IPagination, 'status'> {
-  status: number
+  status: number[]
 }
 
-export { IGetCollectsByUser, IGetCollectsByCollector }
+interface IGetCollectsInProcessByCollector extends Omit<IPagination, 'status'> {
+  id: number
+  status: number[]
+}
+
+export {
+  IGetCollectsByUser,
+  IGetCollectsByCollector,
+  IGetCollectsInProcessByCollector,
+}

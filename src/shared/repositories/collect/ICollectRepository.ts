@@ -7,6 +7,7 @@ import { IGetInfoCollect, IGetListCollectsByUser } from '@/interfaces/collect'
 import {
   IGetCollectsByCollector,
   IGetCollectsByUser,
+  IGetCollectsInProcessByCollector,
 } from '@/interfaces/collect/repository'
 import { IRequestCreateInProgressByCollector } from '@/interfaces/collect/request'
 
@@ -26,7 +27,7 @@ export interface ICollectRepository {
   ): Promise<IGetListCollectsByUser[]>
 
   getTotalRowsCollectsByCollector(
-    status: number,
+    status: number[],
     search?: string,
   ): Promise<number>
 
@@ -35,4 +36,14 @@ export interface ICollectRepository {
   ): Promise<void>
 
   patchStatusCollect(data: TPatchInProcessCollectById): Promise<void>
+
+  getCollectsInProcessByCollector(
+    data: IGetCollectsInProcessByCollector,
+  ): Promise<IGetListCollectsByUser[]>
+
+  getTotalRowsCollectsInProcessByCollector(
+    id: number,
+    status: number[],
+    search?: string,
+  ): Promise<number>
 }

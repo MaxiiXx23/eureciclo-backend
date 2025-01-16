@@ -6,6 +6,7 @@ import {
   IRequestCreateInProgressByCollector,
   IRequestGetCollectsByCollector,
   IRequestGetCollectsByUser,
+  IRequestGetCollectsInProcessByCollector,
 } from '@/interfaces/collect/request'
 import { TCreateCollect } from '@/@types/TCollect'
 import { mapperCollectGetById } from '../mapper/mapperCollectGetById'
@@ -112,17 +113,68 @@ export class CollectService {
   }: IRequestGetCollectsByCollector) {
     const offset = (page - 1) * perPage
 
+    const statusSplited = status.split(',')
+
+    const statusMapped = statusSplited.map((item) => {
+      return Number(item)
+    })
+
     const list = await this.collectRepository.getCollectsByCollector({
       offset,
       perPage,
-      status,
+      status: statusMapped,
       ordernation,
       search,
     })
 
     const totalRows =
       await this.collectRepository.getTotalRowsCollectsByCollector(
-        status,
+        statusMapped,
+        search,
+      )
+
+    const hydrated = hydrateGetListCollectByUser(list)
+
+    const maxPage = Math.ceil(totalRows / perPage)
+
+    return {
+      collects: hydrated,
+      rows: hydrated.length,
+      maxPage,
+      totalRows,
+    }
+  }
+
+  // Busca a lista de Solicitações(Coletas) em progresso pertencentes ao Coletor
+  async getCollectsInProcessByCollector({
+    id,
+    page,
+    perPage,
+    status,
+    ordernation,
+    search,
+  }: IRequestGetCollectsInProcessByCollector) {
+    const offset = (page - 1) * perPage
+
+    const statusSplited = status.split(',')
+
+    const statusMapped = statusSplited.map((item) => {
+      return Number(item)
+    })
+
+    const list = await this.collectRepository.getCollectsInProcessByCollector({
+      id,
+      offset,
+      perPage,
+      status: statusMapped,
+      ordernation,
+      search,
+    })
+
+    const totalRows =
+      await this.collectRepository.getTotalRowsCollectsInProcessByCollector(
+        id,
+        statusMapped,
         search,
       )
 

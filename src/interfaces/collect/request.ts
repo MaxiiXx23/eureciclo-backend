@@ -12,7 +12,7 @@ interface IRequestGetCollectsByUser extends Omit<IRequestPagination, 'status'> {
 
 interface IRequestGetCollectsByCollector
   extends Omit<IRequestPagination, 'status'> {
-  status: number
+  status: string
 }
 
 interface IRequestCreateInProgressByCollector {
@@ -20,9 +20,16 @@ interface IRequestCreateInProgressByCollector {
   collectorId: number
 }
 
+interface IRequestGetCollectsInProcessByCollector
+  extends Omit<IRequestPagination, 'status'> {
+  id: number
+  status: string
+}
+
 export {
   IRequestCreateCollect,
   IRequestGetCollectsByUser,
   IRequestGetCollectsByCollector,
   IRequestCreateInProgressByCollector,
+  IRequestGetCollectsInProcessByCollector,
 }

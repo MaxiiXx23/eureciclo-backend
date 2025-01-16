@@ -4,6 +4,7 @@ import {
   IRequestCreateCollect,
   IRequestGetCollectsByCollector,
   IRequestGetCollectsByUser,
+  IRequestGetCollectsInProcessByCollector,
 } from '@/interfaces/collect/request'
 
 export class CollectController {
@@ -177,11 +178,51 @@ export class CollectController {
         page: Number(page),
         perPage: Number(perPage),
         search: String(search),
-        status: Number(status),
+        status: String(status),
       }
 
       const { collects, maxPage, rows, totalRows } =
         await this.collectUseCase.getCollectsToCollector(payload)
+
+      return res.status(200).json({
+        collects,
+        currentPage: Number(page),
+        maxPage,
+        rows,
+        totalRows,
+        message: 'Informações resgatadas com sucesso.',
+      })
+    } catch (error) {
+      if (error instanceof Error) {
+        return res.status(500).json({
+          message: 'Erro inesperado. Por favor, recarregue novamente a página.',
+        })
+      }
+
+      return next(error)
+    }
+  }
+
+  getCollectsInProcessByCollector = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<Response | void> => {
+    try {
+      const { page, perPage, status, search } = req.query
+
+      const { id } = req.userAuth
+
+      const payload: IRequestGetCollectsInProcessByCollector = {
+        id,
+        page: Number(page),
+        perPage: Number(perPage),
+        search: String(search),
+        status: String(status),
+      }
+
+      const { collects, maxPage, rows, totalRows } =
+        await this.collectUseCase.getCollectsInProcessByCollector(payload)
 
       return res.status(200).json({
         collects,

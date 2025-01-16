@@ -11,6 +11,7 @@ import { IGetInfoCollect, IGetListCollectsByUser } from '@/interfaces/collect'
 import {
   IGetCollectsByCollector,
   IGetCollectsByUser,
+  IGetCollectsInProcessByCollector,
 } from '@/interfaces/collect/repository'
 import { IRequestCreateInProgressByCollector } from '@/interfaces/collect/request'
 
@@ -242,7 +243,9 @@ export class PrismaCollectRepository implements ICollectRepository {
     const list = await prismaProvider.queryDatabase((prisma) =>
       prisma.collect.findMany({
         where: {
-          statusCollectId: status,
+          statusCollectId: {
+            in: [...status],
+          },
           ...(search && {
             OR: [
               {
@@ -292,13 +295,15 @@ export class PrismaCollectRepository implements ICollectRepository {
   }
 
   async getTotalRowsCollectsByCollector(
-    status: number,
+    status: number[],
     search?: string,
   ): Promise<number> {
     const totalRows = await prismaProvider.queryDatabase((prisma) =>
       prisma.collect.count({
         where: {
-          statusCollectId: status,
+          statusCollectId: {
+            in: [...status],
+          },
           ...(search && {
             OR: [
               {
@@ -359,5 +364,121 @@ export class PrismaCollectRepository implements ICollectRepository {
         },
       }),
     )
+  }
+
+  async getCollectsInProcessByCollector({
+    id,
+    offset,
+    perPage,
+    status,
+    // ordernation,
+    search,
+  }: IGetCollectsInProcessByCollector): Promise<IGetListCollectsByUser[]> {
+    const list = await prismaProvider.queryDatabase((prisma) =>
+      prisma.collect.findMany({
+        where: {
+          CollectBy: {
+            some: {
+              collectorId: id,
+            },
+          },
+          statusCollectId: {
+            in: [...status],
+          },
+          ...(search && {
+            OR: [
+              {
+                code: {
+                  contains: search,
+                  mode: 'insensitive',
+                },
+              },
+              {
+                addresses: {
+                  street: {
+                    contains: search,
+                    mode: 'insensitive',
+                  },
+                },
+              },
+              {
+                addresses: {
+                  district: {
+                    contains: search,
+                    mode: 'insensitive',
+                  },
+                },
+              },
+            ],
+          }),
+        },
+        select: {
+          id: true,
+          createdAt: true,
+          statusCollect: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+        orderBy: {
+          createdAt: 'desc',
+        },
+        skip: offset,
+        take: perPage,
+      }),
+    )
+
+    return list
+  }
+
+  async getTotalRowsCollectsInProcessByCollector(
+    id: number,
+    status: number[],
+    search?: string,
+  ): Promise<number> {
+    const totalRows = await prismaProvider.queryDatabase((prisma) =>
+      prisma.collect.count({
+        where: {
+          CollectBy: {
+            some: {
+              collectorId: id,
+            },
+          },
+          statusCollectId: {
+            in: [...status],
+          },
+          ...(search && {
+            OR: [
+              {
+                code: {
+                  contains: search,
+                  mode: 'insensitive',
+                },
+              },
+              {
+                addresses: {
+                  street: {
+                    contains: search,
+                    mode: 'insensitive',
+                  },
+                },
+              },
+              {
+                addresses: {
+                  district: {
+                    contains: search,
+                    mode: 'insensitive',
+                  },
+                },
+              },
+            ],
+          }),
+        },
+      }),
+    )
+
+    return totalRows
   }
 }
