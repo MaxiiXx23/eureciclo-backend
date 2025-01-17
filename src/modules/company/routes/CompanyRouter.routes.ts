@@ -5,6 +5,8 @@ import { middlewares } from '@/shared/imports/middlewares'
 
 const companyRouter = Router()
 
+companyRouter.use(middlewares.ensureToken)
+
 companyRouter.get(
   '/info-profile',
   middlewares.ensureToken,
@@ -18,6 +20,11 @@ companyRouter.put(
   middlewares.ensureToken,
   middlewares.ensureUserClientAdmin,
   controllers.companyController.updateInfos,
+)
+
+companyRouter.get(
+  '/list/search',
+  controllers.companyController.getSearchCompaniesToCollector,
 )
 
 export { companyRouter }

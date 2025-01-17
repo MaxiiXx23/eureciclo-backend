@@ -1,5 +1,6 @@
 import { TCreateCompany, TUpdateInfosCompany } from '@/@types/TCompany'
 import { IInfoProfileCompanyDTO, IUpdateInfoCompanyDTO } from '@/dtos/company'
+import { IRequestGetSearchCompaniesToCollector } from '@/interfaces/company/request'
 import { ICompanyRepository } from '@/shared/repositories/company/ICompanyRepository'
 
 export class CompanyService {
@@ -19,6 +20,7 @@ export class CompanyService {
       email: info.email,
       description: info.description,
       phone: info.phone,
+      address: info.address.length > 0 ? info.address[0] : null,
     }
 
     return {
@@ -67,6 +69,36 @@ export class CompanyService {
 
     return {
       companyUpdated: companyUpdatedDTO,
+    }
+  }
+
+  async getSearchCompaniesToCollector({
+    page,
+    perPage,
+    ordernation,
+    search,
+  }: IRequestGetSearchCompaniesToCollector) {
+    const offset = (page - 1) * perPage
+
+    const list = await this.companyRepository.getSearchCompaniesToCollector({
+      offset,
+      perPage,
+      ordernation,
+      search,
+    })
+
+    const totalRows =
+      await this.companyRepository.getTotalRowsSearchCompaniesToCollector(
+        search,
+      )
+
+    const maxPage = Math.ceil(totalRows / perPage)
+
+    return {
+      companies: list,
+      rows: list.length,
+      maxPage,
+      totalRows,
     }
   }
 }

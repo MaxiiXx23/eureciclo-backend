@@ -1,6 +1,7 @@
 import { PrismaCompanyRepository } from '@/shared/repositories/company/prisma/PrismaCompanyRepository'
 import { CompanyService } from '../services/CompanyService'
 import { TCreateCompany, TUpdateInfosCompany } from '@/@types/TCompany'
+import { IRequestGetSearchCompaniesToCollector } from '@/interfaces/company/request'
 
 export class CompanyUseCase {
   private companyService: CompanyService
@@ -19,5 +20,11 @@ export class CompanyUseCase {
 
   async getInfoProfile(id: number) {
     return await this.companyService.getInfoProfile(id)
+  }
+
+  async getSearchCompaniesToCollector(
+    data: IRequestGetSearchCompaniesToCollector,
+  ) {
+    return await this.companyService.getSearchCompaniesToCollector(data)
   }
 }
