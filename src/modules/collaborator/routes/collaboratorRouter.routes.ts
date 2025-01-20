@@ -13,4 +13,14 @@ collaboratorRouter.post(
   controllers.collaboratorController.register,
 )
 
+collaboratorRouter.get(
+  '/list/search/collectors',
+  controllers.collaboratorController.getSearchCollectorsToCompany,
+)
+
+collaboratorRouter.get(
+  '/info',
+  controllers.collaboratorController.getGetInfoUserById,
+)
+
 export { collaboratorRouter }

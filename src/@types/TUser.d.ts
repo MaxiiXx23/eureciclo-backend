@@ -7,8 +7,8 @@ interface TUser {
   fullName: string
   firstName: string
   lastName: string
-  description: string
-  phone: string
+  description: string | null
+  phone: string | null
   docIdentification: string
   DateOfBirth: string
   status: boolean
@@ -24,8 +24,8 @@ interface TUserWithFieldUserCompany {
   fullName: string
   firstName: string
   lastName: string
-  description: string
-  phone: string
+  description: string | null
+  phone: string | null
   docIdentification: string
   DateOfBirth: string
   status: boolean

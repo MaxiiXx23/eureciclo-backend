@@ -1,7 +1,10 @@
 import { TUserRegister } from '@/@types/TUser'
 import { TCreateUserCompany } from '@/@types/TUserCompany'
 import { ICreateCollaboratorDTO } from '@/dtos/collaborator'
+import { IGetInfoUserDTO } from '@/dtos/user'
+import { IRequestGtSearchCollectorsToCompany } from '@/interfaces/collaborator/request'
 import { ICollaboratorRepository } from '@/shared/repositories/collaborator/ICollaboratorRepository'
+import { NotFoundError } from '@/utils/exceptions/NotFoundError'
 import { hash } from 'bcrypt'
 
 export class CollaboratorService {
@@ -69,6 +72,62 @@ export class CollaboratorService {
 
     return {
       userCreated: userMapped,
+    }
+  }
+
+  async getSearchCollectorsToCompany({
+    page,
+    perPage,
+    ordernation,
+    search,
+  }: IRequestGtSearchCollectorsToCompany) {
+    const offset = (page - 1) * perPage
+
+    const list = await this.collaboratorRepository.getSearchCollectorsToCompany(
+      {
+        offset,
+        perPage,
+        ordernation,
+        search,
+      },
+    )
+
+    const totalRows =
+      await this.collaboratorRepository.getTotalRowsSearchCollectorsToCompany(
+        search,
+      )
+
+    const maxPage = Math.ceil(totalRows / perPage)
+
+    return {
+      collectors: list,
+      rows: list.length,
+      maxPage,
+      totalRows,
+    }
+  }
+
+  // Criar Rota Get Info Profile Usuário
+
+  async getGetInfoUserById(id: number) {
+    const data = await this.collaboratorRepository.getGetInfoUserById(id)
+
+    if (!data) {
+      throw new NotFoundError('Usuário não encontrado!')
+    }
+
+    const user: IGetInfoUserDTO = {
+      id: data.id,
+      name: `${data.firstName} ${data.lastName}`,
+      email: data.email,
+      phone: data.phone,
+      description: data.description,
+      dateOfBirth: data.DateOfBirth,
+      address: data.DateOfBirth.length > 0 ? data.address[0] : null,
+    }
+
+    return {
+      user,
     }
   }
 }

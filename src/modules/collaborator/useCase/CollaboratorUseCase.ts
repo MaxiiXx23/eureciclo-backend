@@ -2,6 +2,7 @@ import { PrismaCollaboratorRepository } from '@/shared/repositories/collaborator
 import { CollaboratorService } from '../services/CollaboratorService'
 import { TCreateUserCompany } from '@/@types/TUserCompany'
 import { TUserRegister } from '@/@types/TUser'
+import { IRequestGtSearchCollectorsToCompany } from '@/interfaces/collaborator/request'
 
 export class CollaboratorUseCase {
   private collaboratorUseService: CollaboratorService
@@ -17,5 +18,15 @@ export class CollaboratorUseCase {
 
   async register(data: TUserRegister) {
     return await this.collaboratorUseService.register(data)
+  }
+
+  async getSearchCollectorsToCompany(
+    data: IRequestGtSearchCollectorsToCompany,
+  ) {
+    return await this.collaboratorUseService.getSearchCollectorsToCompany(data)
+  }
+
+  async getGetInfoUserById(id: number) {
+    return await this.collaboratorUseService.getGetInfoUserById(id)
   }
 }

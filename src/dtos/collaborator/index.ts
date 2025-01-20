@@ -4,7 +4,7 @@ interface ICreateCollaboratorDTO {
   id: number
   email: string
   fullName: string
-  phone: string
+  phone: string | null
   status: boolean
   typeUser: ITypeUserDTO
 }

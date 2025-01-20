@@ -7,6 +7,9 @@ import {
   TUserWithFieldUserCompany,
 } from '@/@types/TUser'
 import { TTypeUser } from '@/@types/TTypeUser'
+import { IGetSearchCollectorsToCompany } from '@/interfaces/collaborator/repository'
+import { IGetItemListCollector } from '@/@types/TCollaborator'
+import { IGetInfoUser } from '@/interfaces/user/repository'
 
 export class PrismaCollaboratorRepository implements ICollaboratorRepository {
   async getUserByEmail(
@@ -19,6 +22,43 @@ export class PrismaCollaboratorRepository implements ICollaboratorRepository {
         },
         include: {
           userCompany: true,
+        },
+      }),
+    )
+
+    return user
+  }
+
+  async getGetInfoUserById(id: number): Promise<IGetInfoUser | null> {
+    const user = await prismaProvider.queryDatabase((prisma) =>
+      prisma.user.findUnique({
+        where: {
+          id,
+          typeUserId: {
+            in: [1, 2],
+          },
+        },
+        select: {
+          id: true,
+          firstName: true,
+          lastName: true,
+          description: true,
+          DateOfBirth: true,
+          email: true,
+          phone: true,
+          address: {
+            select: {
+              id: true,
+              cep: true,
+              street: true,
+              number: true,
+              complement: true,
+              district: true,
+              city: true,
+              state: true,
+              country: true,
+            },
+          },
         },
       }),
     )
@@ -77,5 +117,146 @@ export class PrismaCollaboratorRepository implements ICollaboratorRepository {
     )
 
     return typeUser
+  }
+
+  async getSearchCollectorsToCompany({
+    offset,
+    perPage,
+    // ordernation,
+    search,
+  }: IGetSearchCollectorsToCompany): Promise<IGetItemListCollector[]> {
+    const list = await prismaProvider.queryDatabase((prisma) =>
+      prisma.user.findMany({
+        where: {
+          typeUserId: 2,
+          ...(search && {
+            OR: [
+              {
+                fullName: {
+                  contains: search,
+                  mode: 'insensitive',
+                },
+              },
+              {
+                address: {
+                  some: {
+                    street: {
+                      contains: search,
+                      mode: 'insensitive',
+                    },
+                  },
+                },
+              },
+              {
+                address: {
+                  some: {
+                    district: {
+                      contains: search,
+                      mode: 'insensitive',
+                    },
+                  },
+                },
+              },
+              {
+                address: {
+                  some: {
+                    city: {
+                      contains: search,
+                      mode: 'insensitive',
+                    },
+                  },
+                },
+              },
+              {
+                address: {
+                  some: {
+                    state: {
+                      contains: search,
+                      mode: 'insensitive',
+                    },
+                  },
+                },
+              },
+            ],
+          }),
+        },
+        select: {
+          id: true,
+          firstName: true,
+          lastName: true,
+        },
+        orderBy: {
+          firstName: 'asc',
+        },
+        skip: offset,
+        take: perPage,
+      }),
+    )
+
+    return list
+  }
+
+  async getTotalRowsSearchCollectorsToCompany(
+    search?: string,
+  ): Promise<number> {
+    const totalRows = await prismaProvider.queryDatabase((prisma) =>
+      prisma.user.count({
+        where: {
+          typeUserId: 2,
+          ...(search && {
+            OR: [
+              {
+                fullName: {
+                  contains: search,
+                  mode: 'insensitive',
+                },
+              },
+              {
+                address: {
+                  some: {
+                    street: {
+                      contains: search,
+                      mode: 'insensitive',
+                    },
+                  },
+                },
+              },
+              {
+                address: {
+                  some: {
+                    district: {
+                      contains: search,
+                      mode: 'insensitive',
+                    },
+                  },
+                },
+              },
+              {
+                address: {
+                  some: {
+                    city: {
+                      contains: search,
+                      mode: 'insensitive',
+                    },
+                  },
+                },
+              },
+              {
+                address: {
+                  some: {
+                    state: {
+                      contains: search,
+                      mode: 'insensitive',
+                    },
+                  },
+                },
+              },
+            ],
+          }),
+        },
+      }),
+    )
+
+    return totalRows
   }
 }
