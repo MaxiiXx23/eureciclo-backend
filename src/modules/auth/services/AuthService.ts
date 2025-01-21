@@ -33,6 +33,7 @@ export class AuthService {
         email: hasUser.email,
         firstName: hasUser.firstName,
         lastName: hasUser.lastName,
+        phone: hasUser.phone ? hasUser.phone : '',
         typeUserId: hasUser.typeUserId,
         businesses: {
           id: hasUser.userCompany[0].companyId,
@@ -53,6 +54,7 @@ export class AuthService {
         email: hasUser.email,
         firstName: hasUser.firstName,
         lastName: hasUser.lastName,
+        phone: hasUser.phone ? hasUser.phone : '',
         typeUserId: hasUser.typeUserId,
         businesses: null,
       }

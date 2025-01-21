@@ -5,6 +5,7 @@ import { companyRouter } from '@/modules/company/routes/CompanyRouter.routes'
 import { collaboratorRouter } from '@/modules/collaborator/routes/collaboratorRouter.routes'
 import { collectRouter } from '@/modules/collect/routes/collectRouter.routes'
 import { addressRouter } from '@/modules/address/routes/addressRouter.routes'
+import { userRouter } from '@/modules/user/routes/userRouter.routes'
 
 const appRouter = express.Router()
 
@@ -13,5 +14,6 @@ appRouter.use('/company', companyRouter)
 appRouter.use('/collaborator', collaboratorRouter)
 appRouter.use('/collect', collectRouter)
 appRouter.use('/address', addressRouter)
+appRouter.use('/user', userRouter)
 
 export { appRouter }

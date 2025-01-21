@@ -18,3 +18,14 @@ export interface IGetInfoUser {
     country: string
   }[]
 }
+
+export interface IUpdateInfoNameUser {
+  id: number
+  firstName: string
+  lastName: string
+}
+
+export interface IPatchInfoPhoneUser {
+  id: number
+  phone: string
+}

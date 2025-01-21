@@ -3,6 +3,7 @@ interface IPayloadTokenJWT {
   firstName: string
   lastName: string
   email: string
+  phone: string
   typeUserId: number
   businesses: {
     id: number

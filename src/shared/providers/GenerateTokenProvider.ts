@@ -11,6 +11,7 @@ export class GenerateTokenProvider {
     email,
     firstName,
     lastName,
+    phone,
     typeUserId,
     businesses,
   }: IPayloadTokenJWT) {
@@ -23,6 +24,7 @@ export class GenerateTokenProvider {
         firstName,
         lastName,
         email,
+        phone,
         typeUserId,
         businesses,
       },
