@@ -1,3 +1,4 @@
+import { TProfileImage } from './TProfileImage'
 import { TUserCompany } from './TUserCompany'
 
 interface TUser {
@@ -33,6 +34,7 @@ interface TUserWithFieldUserCompany {
   createdAt: Date
   updatedAt: Date
   userCompany: TUserCompany[]
+  profileImage: TProfileImage[]
 }
 
 interface TUserRegister {

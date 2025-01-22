@@ -6,6 +6,7 @@ import { generateTokenProvider } from '@/shared/providers'
 import { IPayloadTokenJWT } from '@/dtos/auth'
 import { TAuthCredentials, TLogout } from '@/@types/TUserAuth'
 import { TUserRegister } from '@/@types/TUser'
+import { services } from '@/config/services'
 
 export class AuthService {
   constructor(private authRepository: IAuthRepository) {}
@@ -34,6 +35,10 @@ export class AuthService {
         firstName: hasUser.firstName,
         lastName: hasUser.lastName,
         phone: hasUser.phone ? hasUser.phone : '',
+        urlImageProfile:
+          hasUser.profileImage.length > 0
+            ? `${services.url}/imagens/${hasUser.profileImage[0].url}`
+            : `${services.url}/imagens/foto-perfil-sem-imagem.jpg`,
         typeUserId: hasUser.typeUserId,
         businesses: {
           id: hasUser.userCompany[0].companyId,
@@ -55,6 +60,10 @@ export class AuthService {
         firstName: hasUser.firstName,
         lastName: hasUser.lastName,
         phone: hasUser.phone ? hasUser.phone : '',
+        urlImageProfile:
+          hasUser.profileImage.length > 0
+            ? `${services.url}/imagens/${hasUser.profileImage[0].url}`
+            : `${services.url}/imagens/foto-perfil-sem-imagem.jpg`,
         typeUserId: hasUser.typeUserId,
         businesses: null,
       }

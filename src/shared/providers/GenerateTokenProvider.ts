@@ -14,6 +14,7 @@ export class GenerateTokenProvider {
     phone,
     typeUserId,
     businesses,
+    urlImageProfile,
   }: IPayloadTokenJWT) {
     const expiresIn = auth.experies_in_JWT
     const secretKey = auth.secret_key_JWT
@@ -25,6 +26,7 @@ export class GenerateTokenProvider {
         lastName,
         email,
         phone,
+        urlImageProfile,
         typeUserId,
         businesses,
       },

@@ -69,4 +69,34 @@ export class UserController {
       return next(error)
     }
   }
+
+  uploadImageProfile = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<Response | void> => {
+    try {
+      const { file } = req
+      const { id } = req.userAuth
+
+      // vai precinar retornar a url para atualizar no Front de forma instantanea
+      const { urlImage } = await this.userUseCase.uploadImageProfileUser({
+        id,
+        file: file!,
+      })
+
+      return res.status(200).json({
+        urlImage,
+        message: 'Foto de perfil atualizada com sucesso.',
+      })
+    } catch (error) {
+      if (error instanceof Error) {
+        return res.status(500).json({
+          message: 'Erro inesperado. Por favor, recarregue novamente a página.',
+        })
+      }
+
+      return next(error)
+    }
+  }
 }

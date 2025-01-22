@@ -29,3 +29,18 @@ export interface IPatchInfoPhoneUser {
   id: number
   phone: string
 }
+
+export interface TCreateImageProfile {
+  url: string
+  size: number
+  type: string
+  userId?: number
+  companyId?: number
+}
+
+export interface TUpdateImageProfile {
+  id: number
+  url: string
+  size: number
+  type: string
+}

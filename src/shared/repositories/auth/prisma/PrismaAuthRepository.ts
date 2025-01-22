@@ -61,6 +61,7 @@ export class PrismaAuthRepository implements IAuthRepository {
         },
         include: {
           userCompany: true,
+          profileImage: true,
         },
       }),
     )

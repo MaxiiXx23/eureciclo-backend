@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "ProfileImage" ALTER COLUMN "userId" DROP NOT NULL,
+ALTER COLUMN "companyId" DROP NOT NULL;

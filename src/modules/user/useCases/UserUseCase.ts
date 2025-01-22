@@ -4,6 +4,7 @@ import {
   IPatchInfoPhoneUser,
   IUpdateInfoNameUser,
 } from '@/interfaces/user/repository'
+import { IRequestUploadImageProfile } from '@/interfaces/user/request'
 
 export class UserUseCase {
   private userService: UserService
@@ -18,5 +19,9 @@ export class UserUseCase {
 
   async patchPhone(data: IPatchInfoPhoneUser) {
     await this.userService.patchPhone(data)
+  }
+
+  async uploadImageProfileUser(data: IRequestUploadImageProfile) {
+    return await this.userService.uploadImageProfileUser(data)
   }
 }
