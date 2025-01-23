@@ -2,6 +2,7 @@ import { PrismaCompanyRepository } from '@/shared/repositories/company/prisma/Pr
 import { CompanyService } from '../services/CompanyService'
 import { TCreateCompany, TUpdateInfosCompany } from '@/@types/TCompany'
 import { IRequestGetSearchCompaniesToCollector } from '@/interfaces/company/request'
+import { IRequestUploadImageProfile } from '@/interfaces/user/request'
 
 export class CompanyUseCase {
   private companyService: CompanyService
@@ -26,5 +27,9 @@ export class CompanyUseCase {
     data: IRequestGetSearchCompaniesToCollector,
   ) {
     return await this.companyService.getSearchCompaniesToCollector(data)
+  }
+
+  async uploadImageProfileUser(data: IRequestUploadImageProfile) {
+    return await this.companyService.uploadImageProfileUser(data)
   }
 }

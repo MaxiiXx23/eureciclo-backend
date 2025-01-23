@@ -9,6 +9,11 @@ import { ICompanyRepository } from '../ICompanyRepository'
 import { prismaProvider } from '@/shared/providers'
 import { TOccupationArea } from '@/@types/TOccupationArea'
 import { IGetSearchCompaniesToCollector } from '@/interfaces/company/repository'
+import {
+  TCreateImageProfile,
+  TUpdateImageProfile,
+} from '@/interfaces/user/repository'
+import { TProfileImage } from '@/@types/TProfileImage'
 
 export class PrismaCompanyRepository implements ICompanyRepository {
   async getInfoProfileCompanyById(id: number): Promise<IGetInfoCompany | null> {
@@ -36,6 +41,18 @@ export class PrismaCompanyRepository implements ICompanyRepository {
               city: true,
               state: true,
               country: true,
+            },
+          },
+          profileImage: {
+            select: {
+              id: true,
+              url: true,
+              size: true,
+              type: true,
+              userId: true,
+              companyId: true,
+              createdAt: true,
+              updatedAt: true,
             },
           },
         },
@@ -224,5 +241,55 @@ export class PrismaCompanyRepository implements ICompanyRepository {
     )
 
     return totalRows
+  }
+
+  async getImageProfileByCompany(id: number): Promise<TProfileImage | null> {
+    const data = await prismaProvider.queryDatabase((prisma) =>
+      prisma.profileImage.findFirst({
+        where: {
+          companyId: id,
+        },
+      }),
+    )
+
+    return data
+  }
+
+  async createUploadImageProfile(data: TCreateImageProfile): Promise<void> {
+    await prismaProvider.queryDatabase((prisma) =>
+      prisma.profileImage.create({
+        data,
+      }),
+    )
+  }
+
+  async updateUploadImageProfile({
+    id,
+    size,
+    type,
+    url,
+  }: TUpdateImageProfile): Promise<void> {
+    await prismaProvider.queryDatabase((prisma) =>
+      prisma.profileImage.update({
+        where: {
+          id,
+        },
+        data: {
+          size,
+          type,
+          url,
+        },
+      }),
+    )
+  }
+
+  async deleteImageProfile(id: number): Promise<void> {
+    await prismaProvider.queryDatabase((prisma) =>
+      prisma.profileImage.delete({
+        where: {
+          id,
+        },
+      }),
+    )
   }
 }

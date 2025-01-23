@@ -1,6 +1,7 @@
 // import { Company } from '@prisma/client'
 
 import { TAddress } from './TAddress'
+import { TProfileImage } from './TProfileImage'
 
 interface TCompany {
   id: number
@@ -30,8 +31,11 @@ interface TCreateCompany {
 
 interface TUpdateInfosCompany {
   id: number
+  corporateReason: string
+  fantasyName: string
+  email: string
+  phone: string
   description: string
-  occupationAreaId: number
 }
 
 interface TItemListCompany {
@@ -48,6 +52,7 @@ interface IGetInfoCompany {
   email: string
   description: string | null
   address: Omit<TAddress, 'userId' | 'companyId'>[]
+  profileImage: TProfileImage[]
 }
 
 export {

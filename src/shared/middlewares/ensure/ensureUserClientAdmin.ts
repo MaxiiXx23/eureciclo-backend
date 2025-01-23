@@ -24,8 +24,9 @@ export async function ensureUserClientAdmin(
   const [, token] = authToken.split(' ')
 
   try {
+    const tokenReplaced = token.replace('"', '').replace('"', '')
     const tokenDecoded = jwt.verify(
-      token,
+      tokenReplaced,
       auth.secret_key_JWT,
     ) as IPayloadTokenJWT
 
@@ -37,7 +38,7 @@ export async function ensureUserClientAdmin(
       })
     }
 
-    if (isUserCompany[0].companyId !== tokenDecoded.companyId) {
+    if (isUserCompany[0].companyId !== tokenDecoded.businesses?.id) {
       return res.status(401).json({
         error: 'Acesso negado. Usuário pertence a empresa.',
       })

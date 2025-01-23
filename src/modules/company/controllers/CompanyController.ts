@@ -41,13 +41,21 @@ export class CompanyController {
   ): Promise<Response | void> => {
     try {
       const { id } = req.query
-      const { description, occupationAreaId }: Omit<TUpdateInfosCompany, 'id'> =
-        req.body
+      const {
+        description,
+        email,
+        fantasyName,
+        corporateReason,
+        phone,
+      }: Omit<TUpdateInfosCompany, 'id'> = req.body
 
       const payload: TUpdateInfosCompany = {
         id: Number(id),
         description,
-        occupationAreaId,
+        email,
+        fantasyName,
+        corporateReason,
+        phone,
       }
       await this.companyUseCase.updateInfos(payload)
 
@@ -114,6 +122,36 @@ export class CompanyController {
         rows,
         totalRows,
         message: 'Informações resgatadas com sucesso.',
+      })
+    } catch (error) {
+      if (error instanceof Error) {
+        return res.status(500).json({
+          message: 'Erro inesperado. Por favor, recarregue novamente a página.',
+        })
+      }
+
+      return next(error)
+    }
+  }
+
+  uploadImageProfile = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<Response | void> => {
+    try {
+      const { file } = req
+      const { id } = req.query
+
+      // vai precinar retornar a url para atualizar no Front de forma instantanea
+      const { urlImage } = await this.companyUseCase.uploadImageProfileUser({
+        id: Number(id),
+        file: file!,
+      })
+
+      return res.status(200).json({
+        urlImage,
+        message: 'Foto de perfil atualizada com sucesso.',
       })
     } catch (error) {
       if (error instanceof Error) {
