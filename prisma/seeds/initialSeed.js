@@ -45,7 +45,7 @@ async function initialSeed() {
       phone: '11981445890',
       docIdentification: '999.999.999-99',
       DateOfBirth: '31/01/2000',
-      typeUserId: 1,
+      typeUserId: 3,
     }
 
     await prisma.typeUser.create({
