@@ -26,6 +26,35 @@ export class PrismaCollectRepository implements ICollectRepository {
     return collect
   }
 
+  async pathConfirmCollect(id: number): Promise<TCollect | null> {
+    const data = await prismaProvider.queryDatabase((prisma) =>
+      prisma.collect.update({
+        where: {
+          id,
+        },
+        data: {
+          statusCollectId: 1,
+        },
+      }),
+    )
+
+    return data
+  }
+
+  async getByIdAndCode(id: number, code: string): Promise<TCollect | null> {
+    const data = await prismaProvider.queryDatabase((prisma) =>
+      prisma.collect.findFirst({
+        where: {
+          id,
+          code,
+          statusCollectId: 3,
+        },
+      }),
+    )
+
+    return data
+  }
+
   async getById(id: number): Promise<IGetInfoCollect | null> {
     const data = await prismaProvider.queryDatabase((prisma) =>
       prisma.collect.findUnique({

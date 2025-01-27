@@ -13,6 +13,9 @@ import { IRequestCreateInProgressByCollector } from '@/interfaces/collect/reques
 
 export interface ICollectRepository {
   create(data: TCreateCollect): Promise<TCollect>
+  getByIdAndCode(id: number, code: string): Promise<TCollect | null>
+  pathConfirmCollect(id: number): Promise<TCollect | null>
+
   getById(id: number): Promise<IGetInfoCollect | null>
   getInProgressByUserId(id: number): Promise<IGetInfoCollect | null>
   getCollectsByUser(data: IGetCollectsByUser): Promise<IGetListCollectsByUser[]>

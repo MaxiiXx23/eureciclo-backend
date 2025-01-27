@@ -28,6 +28,11 @@ collectRouter.post(
   controllers.collectController.create,
 )
 
+collectRouter.patch(
+  '/confirm-collect',
+  controllers.collectController.patchConfirmCollect,
+)
+
 collectRouter.get('/info', controllers.collectController.getCollectById)
 collectRouter.get(
   '/info/in-progress',

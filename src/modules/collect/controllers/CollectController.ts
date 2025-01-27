@@ -49,6 +49,30 @@ export class CollectController {
     }
   }
 
+  patchConfirmCollect = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<Response | void> => {
+    try {
+      const { id, code } = req.query
+
+      await this.collectUseCase.patchConfirmCollect(Number(id), String(code))
+
+      return res.status(201).json({
+        message: 'Solicitação de coleta confirmada com sucesso!',
+      })
+    } catch (error) {
+      if (error instanceof Error) {
+        return res.status(500).json({
+          message: 'Erro inesperado. Por favor, recarregue novamente a página.',
+        })
+      }
+
+      return next(error)
+    }
+  }
+
   createInProgressByCollector = async (
     req: Request,
     res: Response,

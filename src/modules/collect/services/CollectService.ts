@@ -1,5 +1,3 @@
-import { v4 as uuidv4 } from 'uuid'
-
 import { ICollectRepository } from '@/shared/repositories/collect/ICollectRepository'
 import {
   IRequestCreateCollect,
@@ -11,6 +9,8 @@ import {
 import { TCreateCollect } from '@/@types/TCollect'
 import { mapperCollectGetById } from '../mapper/mapperCollectGetById'
 import { hydrateGetListCollectByUser } from '@/utils/hydrates/collect/hydrateGetListCollectByUser'
+import { genereteCodeCollect } from '@/utils/functions/genereteCodeCollect'
+import { BadRequestError } from '@/utils/exceptions/BadRequestError'
 
 export class CollectService {
   constructor(private collectRepository: ICollectRepository) {}
@@ -21,7 +21,7 @@ export class CollectService {
     statusCollectId,
     userId,
   }: IRequestCreateCollect) {
-    const code = uuidv4()
+    const code = genereteCodeCollect()
 
     const data: TCreateCollect = {
       code,
@@ -36,6 +36,18 @@ export class CollectService {
     return {
       collectCreated,
     }
+  }
+
+  async patchConfirmCollect(id: number, code: string) {
+    const codeFormmated = code.toLocaleUpperCase()
+
+    const data = await this.collectRepository.getByIdAndCode(id, codeFormmated)
+
+    if (!data) {
+      throw new BadRequestError('Solicitação de coleta não encontrada!')
+    }
+
+    await this.collectRepository.pathConfirmCollect(id)
   }
 
   async getCollectById(id: number) {

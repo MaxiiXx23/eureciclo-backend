@@ -30,6 +30,10 @@ export class CollectUseCase {
     })
   }
 
+  async patchConfirmCollect(id: number, code: string) {
+    await this.collectService.patchConfirmCollect(id, code)
+  }
+
   async getCollectById(id: number) {
     return await this.collectService.getCollectById(id)
   }
