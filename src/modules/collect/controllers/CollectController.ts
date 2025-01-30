@@ -6,6 +6,7 @@ import {
   IRequestGetCollectsByUser,
   IRequestGetCollectsInProcessByCollector,
 } from '@/interfaces/collect/request'
+import { BadRequestError } from '@/utils/exceptions/BadRequestError'
 
 export class CollectController {
   private collectUseCase: CollectUseCase
@@ -63,6 +64,12 @@ export class CollectController {
         message: 'Solicitação de coleta confirmada com sucesso!',
       })
     } catch (error) {
+      if (error instanceof BadRequestError) {
+        return res.status(error.code).json({
+          message: error.message,
+        })
+      }
+
       if (error instanceof Error) {
         return res.status(500).json({
           message: 'Erro inesperado. Por favor, recarregue novamente a página.',
