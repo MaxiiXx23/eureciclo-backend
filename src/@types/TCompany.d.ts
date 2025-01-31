@@ -41,6 +41,10 @@ interface TUpdateInfosCompany {
 interface TItemListCompany {
   id: number
   fantasyName: string
+  profileImage: {
+    id: number
+    url: string
+  }[]
 }
 
 interface IGetInfoCompany {

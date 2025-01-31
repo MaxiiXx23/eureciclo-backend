@@ -21,4 +21,14 @@ interface IInfoProfileCompanyDTO {
   address: Omit<TAddress, 'userId' | 'companyId'> | null
 }
 
-export { IUpdateInfoCompanyDTO, IInfoProfileCompanyDTO }
+interface IGetItemListCompaniesDTO {
+  id: number
+  name: string
+  urlImage: string
+}
+
+export {
+  IUpdateInfoCompanyDTO,
+  IInfoProfileCompanyDTO,
+  IGetItemListCompaniesDTO,
+}

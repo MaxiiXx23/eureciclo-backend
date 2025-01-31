@@ -5,6 +5,7 @@ export interface IGetInfoUserDTO {
   description: string
   phone: string | null
   dateOfBirth: string
+  urlImage: string
   address: {
     id: number
     cep: string
@@ -16,4 +17,10 @@ export interface IGetInfoUserDTO {
     state: string
     country: string
   } | null
+}
+
+export interface IGetItemListCollectorDTO {
+  id: number
+  name: string
+  urlImage: string
 }

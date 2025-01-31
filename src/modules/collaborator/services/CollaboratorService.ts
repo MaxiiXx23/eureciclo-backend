@@ -1,10 +1,12 @@
 import { TUserRegister } from '@/@types/TUser'
 import { TCreateUserCompany } from '@/@types/TUserCompany'
+import { services } from '@/config/services'
 import { ICreateCollaboratorDTO } from '@/dtos/collaborator'
 import { IGetInfoUserDTO } from '@/dtos/user'
 import { IRequestGtSearchCollectorsToCompany } from '@/interfaces/collaborator/request'
 import { ICollaboratorRepository } from '@/shared/repositories/collaborator/ICollaboratorRepository'
 import { NotFoundError } from '@/utils/exceptions/NotFoundError'
+import { hydrateGetListCollectores } from '@/utils/hydrates/collaborator/hydrateGetListCollectores'
 import { hash } from 'bcrypt'
 
 export class CollaboratorService {
@@ -97,10 +99,11 @@ export class CollaboratorService {
         search,
       )
 
+    const listHydrated = hydrateGetListCollectores(list)
     const maxPage = Math.ceil(totalRows / perPage)
 
     return {
-      collectors: list,
+      collectors: listHydrated,
       rows: list.length,
       maxPage,
       totalRows,
@@ -124,6 +127,10 @@ export class CollaboratorService {
       description: data.description,
       dateOfBirth: data.DateOfBirth,
       address: data.DateOfBirth.length > 0 ? data.address[0] : null,
+      urlImage:
+        data.profileImage.length > 0
+          ? `${services.url}/imagens/${data.profileImage[0].url}`
+          : `${services.url}/imagens/foto-perfil-sem-imagem.jpg`,
     }
 
     return {

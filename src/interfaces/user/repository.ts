@@ -6,6 +6,10 @@ export interface IGetInfoUser {
   description: string
   phone: string | null
   DateOfBirth: string
+  profileImage: {
+    id: number
+    url: string
+  }[]
   address: {
     id: number
     cep: string

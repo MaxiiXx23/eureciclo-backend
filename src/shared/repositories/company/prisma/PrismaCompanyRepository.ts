@@ -177,6 +177,12 @@ export class PrismaCompanyRepository implements ICompanyRepository {
         select: {
           id: true,
           fantasyName: true,
+          profileImage: {
+            select: {
+              id: true,
+              url: true,
+            },
+          },
         },
         orderBy: {
           createdAt: 'desc',

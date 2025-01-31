@@ -9,6 +9,7 @@ import { IInfoProfileCompanyDTO, IUpdateInfoCompanyDTO } from '@/dtos/company'
 import { IRequestGetSearchCompaniesToCollector } from '@/interfaces/company/request'
 import { ICompanyRepository } from '@/shared/repositories/company/ICompanyRepository'
 import { IRequestUploadImageProfile } from '@/interfaces/user/request'
+import { hydrateGetListCompanies } from '@/utils/hydrates/company/hydrateGetListCompanies'
 
 export class CompanyService {
   constructor(private companyRepository: ICompanyRepository) {}
@@ -102,10 +103,12 @@ export class CompanyService {
         search,
       )
 
+    const listHydrated = hydrateGetListCompanies(list)
+
     const maxPage = Math.ceil(totalRows / perPage)
 
     return {
-      companies: list,
+      companies: listHydrated,
       rows: list.length,
       maxPage,
       totalRows,
