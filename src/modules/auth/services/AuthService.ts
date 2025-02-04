@@ -3,10 +3,13 @@ import { compare, hash } from 'bcrypt'
 import { IAuthRepository } from '@/shared/repositories/auth/IAuthRepository'
 import { generateTokenProvider } from '@/shared/providers'
 
+import { services } from '@/config/services'
+
 import { IPayloadTokenJWT } from '@/dtos/auth'
 import { TAuthCredentials, TLogout } from '@/@types/TUserAuth'
 import { TUserRegister } from '@/@types/TUser'
-import { services } from '@/config/services'
+
+import { BadRequestError } from '@/utils/exceptions/BadRequestError'
 
 export class AuthService {
   constructor(private authRepository: IAuthRepository) {}
@@ -15,7 +18,7 @@ export class AuthService {
     const hasUser = await this.authRepository.getUserByEmail(credentials.email)
 
     if (!hasUser) {
-      throw new Error(
+      throw new BadRequestError(
         'E-mail e/ou senha incorretos. Por favor, tente novamente.',
       )
     }
@@ -23,7 +26,7 @@ export class AuthService {
     const matchPassword = await compare(credentials.password, hasUser.password)
 
     if (!matchPassword) {
-      throw new Error(
+      throw new BadRequestError(
         'E-mail e/ou senha incorretos. Por favor, tente novamente.',
       )
     }
@@ -83,7 +86,9 @@ export class AuthService {
       await this.authRepository.findRefreshToken(refreshToken)
 
     if (!hasRefreshToken) {
-      throw new Error('Erro ao fazer logout. Por favor, tente novamente.')
+      throw new BadRequestError(
+        'Erro ao fazer logout. Por favor, tente novamente.',
+      )
     }
 
     await this.authRepository.deleteRefreshToken(hasRefreshToken.id)
@@ -101,7 +106,9 @@ export class AuthService {
     const hasAlreadyUser = await this.authRepository.getUserByEmail(email)
 
     if (hasAlreadyUser) {
-      throw new Error('Erro ao utilizar este e-mail, pois, já está em uso.')
+      throw new BadRequestError(
+        'Erro ao utilizar este e-mail, pois, já está em uso.',
+      )
     }
 
     const passwordHashed = await hash(password, 6)

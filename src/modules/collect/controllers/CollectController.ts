@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
+
 import { CollectUseCase } from '../useCases/CollectUseCase'
 import {
   IRequestCreateCollect,
@@ -6,7 +7,9 @@ import {
   IRequestGetCollectsByUser,
   IRequestGetCollectsInProcessByCollector,
 } from '@/interfaces/collect/request'
+
 import { BadRequestError } from '@/utils/exceptions/BadRequestError'
+import { NotFoundError } from '@/utils/exceptions/NotFoundError'
 
 export class CollectController {
   private collectUseCase: CollectUseCase
@@ -60,7 +63,7 @@ export class CollectController {
 
       await this.collectUseCase.patchConfirmCollect(Number(id), String(code))
 
-      return res.status(201).json({
+      return res.status(200).json({
         message: 'Solicitação de coleta confirmada com sucesso!',
       })
     } catch (error) {
@@ -94,7 +97,7 @@ export class CollectController {
         collectorId,
       })
 
-      return res.status(201).json({
+      return res.status(200).json({
         message: 'Coleta em processo!',
       })
     } catch (error) {
@@ -123,6 +126,12 @@ export class CollectController {
         message: 'Informações resgatadas com sucesso.',
       })
     } catch (error) {
+      if (error instanceof NotFoundError) {
+        return res.status(error.code).json({
+          message: error.message,
+        })
+      }
+
       if (error instanceof Error) {
         return res.status(500).json({
           message: 'Erro inesperado. Por favor, recarregue novamente a página.',
@@ -148,6 +157,12 @@ export class CollectController {
         message: 'Informações resgatadas com sucesso.',
       })
     } catch (error) {
+      if (error instanceof NotFoundError) {
+        return res.status(error.code).json({
+          message: error.message,
+        })
+      }
+
       if (error instanceof Error) {
         return res.status(500).json({
           message: 'Erro inesperado. Por favor, recarregue novamente a página.',

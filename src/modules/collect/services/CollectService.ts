@@ -1,3 +1,7 @@
+import { mapperCollectGetById } from '../mapper/mapperCollectGetById'
+import { hydrateGetListCollectByUser } from '@/utils/hydrates/collect/hydrateGetListCollectByUser'
+import { genereteCodeCollect } from '@/utils/functions/genereteCodeCollect'
+
 import { ICollectRepository } from '@/shared/repositories/collect/ICollectRepository'
 import {
   IRequestCreateCollect,
@@ -7,10 +11,9 @@ import {
   IRequestGetCollectsInProcessByCollector,
 } from '@/interfaces/collect/request'
 import { TCreateCollect } from '@/@types/TCollect'
-import { mapperCollectGetById } from '../mapper/mapperCollectGetById'
-import { hydrateGetListCollectByUser } from '@/utils/hydrates/collect/hydrateGetListCollectByUser'
-import { genereteCodeCollect } from '@/utils/functions/genereteCodeCollect'
+
 import { BadRequestError } from '@/utils/exceptions/BadRequestError'
+import { NotFoundError } from '@/utils/exceptions/NotFoundError'
 
 export class CollectService {
   constructor(private collectRepository: ICollectRepository) {}
@@ -54,7 +57,7 @@ export class CollectService {
     const collect = await this.collectRepository.getById(id)
 
     if (!collect) {
-      throw new Error('Informações sobre a coleta não encontra.')
+      throw new NotFoundError('Informações sobre a coleta não encontra.')
     }
 
     const data = mapperCollectGetById(collect)
@@ -68,7 +71,7 @@ export class CollectService {
     const collect = await this.collectRepository.getInProgressByUserId(id)
 
     if (!collect) {
-      throw new Error('Informações sobre a coleta não encontra.')
+      throw new NotFoundError('Informações sobre a coleta não encontra.')
     }
 
     const data = mapperCollectGetById(collect)

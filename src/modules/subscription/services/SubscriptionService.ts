@@ -1,10 +1,11 @@
+import dayjs from 'dayjs'
+
 import {
   TCreateSubscription,
   TRequestCreateSubscription,
 } from '@/@types/TSubscription'
 import { ISubscriptionDTO } from '@/dtos/subscription'
 import { ISubscriptionRepository } from '@/shared/repositories/SubscriptionRepository/ISubscriptionRepository'
-import dayjs from 'dayjs'
 
 export class SubcriptionService {
   constructor(private subscriptionRepository: ISubscriptionRepository) {}

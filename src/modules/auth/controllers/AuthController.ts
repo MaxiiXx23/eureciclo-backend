@@ -1,9 +1,11 @@
 import { NextFunction, Request, Response } from 'express'
 
 import { AuthUseCase } from '../useCases/AuthUseCase'
+
+import { ICreateUserAndCompany } from '@/interfaces/auth'
 import { TAuthCredentials } from '@/@types/TUserAuth'
 import { TUserRegister } from '@/@types/TUser'
-import { ICreateUserAndCompany } from '@/interfaces/auth'
+import { BadRequestError } from '@/utils/exceptions/BadRequestError'
 
 export class AuthController {
   async auth(
@@ -27,6 +29,12 @@ export class AuthController {
         message: 'Login realizado com sucesso.',
       })
     } catch (error) {
+      if (error instanceof BadRequestError) {
+        return res.status(error.code).json({
+          message: error.message,
+        })
+      }
+
       if (error instanceof Error) {
         return res.status(500).json({
           message: error.message,
@@ -53,6 +61,12 @@ export class AuthController {
         message: 'Você foi desconectado com sucesso.',
       })
     } catch (error) {
+      if (error instanceof BadRequestError) {
+        return res.status(error.code).json({
+          message: error.message,
+        })
+      }
+
       if (error instanceof Error) {
         return res.status(500).json({
           message: error.message,
@@ -79,6 +93,12 @@ export class AuthController {
         message: 'Sua conta foi criada com sucesso.',
       })
     } catch (error) {
+      if (error instanceof BadRequestError) {
+        return res.status(error.code).json({
+          message: error.message,
+        })
+      }
+
       if (error instanceof Error) {
         return res.status(500).json({
           message: error.message,

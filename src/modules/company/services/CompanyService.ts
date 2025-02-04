@@ -4,12 +4,16 @@ import fs from 'fs'
 import { services } from '@/config/services'
 import { tmpFolder } from '@/config/uploadImages'
 
+import { hydrateGetListCompanies } from '@/utils/hydrates/company/hydrateGetListCompanies'
+
 import { TCreateCompany, TUpdateInfosCompany } from '@/@types/TCompany'
 import { IInfoProfileCompanyDTO, IUpdateInfoCompanyDTO } from '@/dtos/company'
 import { IRequestGetSearchCompaniesToCollector } from '@/interfaces/company/request'
 import { ICompanyRepository } from '@/shared/repositories/company/ICompanyRepository'
 import { IRequestUploadImageProfile } from '@/interfaces/user/request'
-import { hydrateGetListCompanies } from '@/utils/hydrates/company/hydrateGetListCompanies'
+
+import { NotFoundError } from '@/utils/exceptions/NotFoundError'
+import { BadRequestError } from '@/utils/exceptions/BadRequestError'
 
 export class CompanyService {
   constructor(private companyRepository: ICompanyRepository) {}
@@ -18,7 +22,9 @@ export class CompanyService {
     const info = await this.companyRepository.getInfoProfileCompanyById(id)
 
     if (!info) {
-      throw new Error('Empresa não encontrada. Por favor, tente novamente')
+      throw new NotFoundError(
+        'Empresa não encontrada. Por favor, tente novamente',
+      )
     }
 
     const dataMapped: IInfoProfileCompanyDTO = {
@@ -48,7 +54,7 @@ export class CompanyService {
       )
 
     if (companyAlreadyExists) {
-      throw new Error('Empresa já existente.')
+      throw new BadRequestError('Empresa já existente.')
     }
 
     const companyCreated = await this.companyRepository.create(data)
@@ -62,7 +68,7 @@ export class CompanyService {
     const hasCompany = await this.companyRepository.getCompanyById(data.id)
 
     if (!hasCompany) {
-      throw new Error('Empresa não encontrada.')
+      throw new NotFoundError('Empresa não encontrada.')
     }
 
     const companyUpdated = await this.companyRepository.updateInfos(data)

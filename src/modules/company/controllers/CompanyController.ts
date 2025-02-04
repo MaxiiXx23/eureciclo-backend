@@ -1,7 +1,11 @@
 import { Request, Response, NextFunction } from 'express'
+
 import { CompanyUseCase } from '../useCases/CompanyUseCase'
 import { TCreateCompany, TUpdateInfosCompany } from '@/@types/TCompany'
 import { IRequestGetSearchCompaniesToCollector } from '@/interfaces/company/request'
+
+import { NotFoundError } from '@/utils/exceptions/NotFoundError'
+import { BadRequestError } from '@/utils/exceptions/BadRequestError'
 
 export class CompanyController {
   private companyUseCase: CompanyUseCase
@@ -24,6 +28,12 @@ export class CompanyController {
         message: 'Empresa cadastrada com sucesso.',
       })
     } catch (error) {
+      if (error instanceof BadRequestError) {
+        return res.status(error.code).json({
+          message: error.message,
+        })
+      }
+
       if (error instanceof Error) {
         return res.status(500).json({
           message: error.message,
@@ -63,6 +73,12 @@ export class CompanyController {
         message: 'Informações atualizadas com sucesso.',
       })
     } catch (error) {
+      if (error instanceof NotFoundError) {
+        return res.status(error.code).json({
+          message: error.message,
+        })
+      }
+
       if (error instanceof Error) {
         return res.status(500).json({
           message: error.message,
@@ -88,6 +104,12 @@ export class CompanyController {
         message: 'Informações resgatadas com sucesso.',
       })
     } catch (error) {
+      if (error instanceof NotFoundError) {
+        return res.status(error.code).json({
+          message: error.message,
+        })
+      }
+
       if (error instanceof Error) {
         return res.status(500).json({
           message: error.message,
