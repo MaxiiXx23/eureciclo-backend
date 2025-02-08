@@ -46,6 +46,7 @@ export class PrismaCollaboratorRepository implements ICollaboratorRepository {
           DateOfBirth: true,
           email: true,
           phone: true,
+          rating: true,
           profileImage: {
             select: {
               id: true,
@@ -190,6 +191,7 @@ export class PrismaCollaboratorRepository implements ICollaboratorRepository {
           id: true,
           firstName: true,
           lastName: true,
+          rating: true,
           profileImage: {
             select: {
               id: true,

@@ -10,6 +10,7 @@ export function hydrateGetListCollectores(
     const hydratedItem: IGetItemListCollectorDTO = {
       id: item.id,
       name: `${item.firstName} ${item.lastName}`,
+      rating: item.rating,
       urlImage:
         item.profileImage.length > 0
           ? `${services.url}/imagens/${item.profileImage[0].url}`

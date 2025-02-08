@@ -41,6 +41,7 @@ interface TUpdateInfosCompany {
 interface TItemListCompany {
   id: number
   fantasyName: string
+  rating: number
   profileImage: {
     id: number
     url: string

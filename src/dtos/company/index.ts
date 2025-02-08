@@ -24,6 +24,7 @@ interface IInfoProfileCompanyDTO {
 interface IGetItemListCompaniesDTO {
   id: number
   name: string
+  rating: number
   urlImage: string
 }
 

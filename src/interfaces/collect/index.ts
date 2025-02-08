@@ -9,6 +9,7 @@ export interface IGetInfoCollect {
     id: number
     firstName: string
     lastName: string
+    rating: number
   }
   statusCollect: {
     id: number
@@ -35,6 +36,7 @@ export interface IGetInfoCollect {
       id: number
       firstName: string
       lastName: string
+      rating: number
       createdAt: Date
     } | null
   }[]

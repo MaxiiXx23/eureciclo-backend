@@ -12,17 +12,12 @@ const upload = multer(uploadConfig(regx))
 
 companyRouter.use(middlewares.ensureToken)
 
-companyRouter.get(
-  '/info-profile',
-  middlewares.ensureToken,
-  controllers.companyController.getInfoProfile,
-)
+companyRouter.get('/info-profile', controllers.companyController.getInfoProfile)
 
 companyRouter.post('/register', controllers.companyController.create)
 
 companyRouter.put(
   '/update/infos',
-  middlewares.ensureToken,
   middlewares.ensureUserClientAdmin,
   controllers.companyController.updateInfos,
 )

@@ -21,6 +21,7 @@ export function mapperCollectGetById(
     user: {
       id: data.user.id,
       name: `${data.user.firstName} ${data.user.lastName}`,
+      rating: data.user.rating,
     },
     status: data.statusCollect,
     image: {
@@ -34,6 +35,7 @@ export function mapperCollectGetById(
         : {
             id: data.CollectBy[0].collector!.id,
             name: `${data.CollectBy[0].collector!.firstName} ${data.CollectBy[0].collector!.lastName}`,
+            rating: data.CollectBy[0].collector!.rating,
             createdAt: dayjs(data.CollectBy[0].collector?.createdAt).format(
               'DD/MM/YYYY',
             ),

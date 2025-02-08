@@ -177,6 +177,7 @@ export class PrismaCompanyRepository implements ICompanyRepository {
         select: {
           id: true,
           fantasyName: true,
+          rating: true,
           profileImage: {
             select: {
               id: true,

@@ -30,6 +30,7 @@ interface TUserWithFieldUserCompany {
   docIdentification: string
   DateOfBirth: string
   status: boolean
+  rating: number
   typeUserId: number
   createdAt: Date
   updatedAt: Date

@@ -127,6 +127,7 @@ export class CollaboratorService {
       description: data.description,
       dateOfBirth: data.DateOfBirth,
       address: data.DateOfBirth.length > 0 ? data.address[0] : null,
+      rating: data.rating,
       urlImage:
         data.profileImage.length > 0
           ? `${services.url}/imagens/${data.profileImage[0].url}`

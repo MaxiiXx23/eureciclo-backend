@@ -4,6 +4,7 @@ interface IPayloadTokenJWT {
   lastName: string
   email: string
   phone: string
+  rating: number
   typeUserId: number
   urlImageProfile: string
   businesses: {

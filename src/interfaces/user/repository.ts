@@ -6,6 +6,7 @@ export interface IGetInfoUser {
   description: string
   phone: string | null
   DateOfBirth: string
+  rating: number
   profileImage: {
     id: number
     url: string

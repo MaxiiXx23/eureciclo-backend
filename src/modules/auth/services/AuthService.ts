@@ -38,6 +38,7 @@ export class AuthService {
         firstName: hasUser.firstName,
         lastName: hasUser.lastName,
         phone: hasUser.phone ? hasUser.phone : '',
+        rating: hasUser.rating,
         urlImageProfile:
           hasUser.profileImage.length > 0
             ? `${services.url}/imagens/${hasUser.profileImage[0].url}`
@@ -63,6 +64,7 @@ export class AuthService {
         firstName: hasUser.firstName,
         lastName: hasUser.lastName,
         phone: hasUser.phone ? hasUser.phone : '',
+        rating: hasUser.rating,
         urlImageProfile:
           hasUser.profileImage.length > 0
             ? `${services.url}/imagens/${hasUser.profileImage[0].url}`

@@ -86,6 +86,7 @@ export class PrismaCollectRepository implements ICollectRepository {
               id: true,
               firstName: true,
               lastName: true,
+              rating: true,
             },
           },
           addresses: {
@@ -108,6 +109,7 @@ export class PrismaCollectRepository implements ICollectRepository {
                   id: true,
                   firstName: true,
                   lastName: true,
+                  rating: true,
                   createdAt: true,
                 },
               },
@@ -158,6 +160,7 @@ export class PrismaCollectRepository implements ICollectRepository {
               id: true,
               firstName: true,
               lastName: true,
+              rating: true,
             },
           },
           addresses: {
@@ -180,6 +183,7 @@ export class PrismaCollectRepository implements ICollectRepository {
                   id: true,
                   firstName: true,
                   lastName: true,
+                  rating: true,
                   createdAt: true,
                 },
               },

@@ -8,6 +8,7 @@ export interface IGetInfoCollectDTO {
   user: {
     id: number
     name: string
+    rating: number
   }
   status: {
     id: number
@@ -32,6 +33,7 @@ export interface IGetInfoCollectDTO {
   collector: {
     id: number
     name: string
+    rating: number
     createdAt: string
   } | null
 }
