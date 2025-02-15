@@ -8,30 +8,32 @@ datasource db {
 }
 
 model User {
-  id                Int            @id @default(autoincrement())
-  email             String         @unique
-  password          String
-  fullName          String
-  firstName         String
-  lastName          String
-  description       String
-  phone             String?
-  docIdentification String
-  DateOfBirth       String
-  status            Boolean        @default(true)
-  rating            Float          @default(0)
-  typeUserId        Int
-  createdAt         DateTime       @default(now())
-  updatedAt         DateTime       @updatedAt
-  typeUser          TypeUser       @relation(fields: [typeUserId], references: [id])
-  profileImage      ProfileImage[]
-  userCompany       UserCompany[]
-  address           Address[]
-  refreshToken      RefreshToken[]
-  Collect           Collect[]
-  CollectBy         CollectBy[]
-  Review            Review[]       @relation(name: "UserReviews")
-  receivedReviews   Review[]       @relation(name: "ReceivedReviews")
+  id                   Int            @id @default(autoincrement())
+  email                String         @unique
+  password             String
+  fullName             String
+  firstName            String
+  lastName             String
+  description          String
+  phone                String?
+  docIdentification    String
+  DateOfBirth          String
+  status               Boolean        @default(true)
+  rating               Float          @default(0)
+  typeUserId           Int
+  createdAt            DateTime       @default(now())
+  updatedAt            DateTime       @updatedAt
+  typeUser             TypeUser       @relation(fields: [typeUserId], references: [id])
+  profileImage         ProfileImage[]
+  userCompany          UserCompany[]
+  address              Address[]
+  refreshToken         RefreshToken[]
+  Collect              Collect[]
+  CollectBy            CollectBy[]
+  Review               Review[]       @relation(name: "UserReviews")
+  receivedReviews      Review[]       @relation(name: "ReceivedReviews")
+  Notification         Notification[] @relation(name: "SendedByUser")
+  ReceivedNotification Notification[] @relation(name: "receivedByUser")
 }
 
 model Company {
@@ -55,6 +57,7 @@ model Company {
   Subscription      Subscription[]
   CollectBy         CollectBy[]
   Review            Review[]
+  Notification      Notification[]
 }
 
 model UserCompany {
@@ -245,4 +248,21 @@ model Review {
   company      Company? @relation(fields: [companyId], references: [id], onDelete: Cascade)
   user         User     @relation(name: "UserReviews", fields: [userId], references: [id], onDelete: Cascade)
   reviewedUser User?    @relation(name: "ReceivedReviews", fields: [reviewedUserId], references: [id], onDelete: Cascade)
+}
+
+model Notification {
+  id Int @id @default(autoincrement())
+
+  data             Json
+  userId           Int
+  isRead           Boolean @default(false)
+  receivedByUserId Int
+  companyId        Int?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user           User     @relation(name: "SendedByUser", fields: [userId], references: [id], onDelete: Cascade)
+  receivedByUser User     @relation(name: "receivedByUser", fields: [receivedByUserId], references: [id], onDelete: Cascade)
+  company        Company? @relation(fields: [companyId], references: [id], onDelete: Cascade)
 }

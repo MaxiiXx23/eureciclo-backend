@@ -3,6 +3,7 @@ import { AuthController } from '@/modules/auth/controllers/AuthController'
 import { CollaboratorController } from '@/modules/collaborator/controllers/CollaboratorController'
 import { CollectController } from '@/modules/collect/controllers/CollectController'
 import { CompanyController } from '@/modules/company/controllers/CompanyController'
+import { NoticationController } from '@/modules/notification/controllers/NotificationController'
 import { ReviewController } from '@/modules/review/controllers/ReviewController'
 import { UserController } from '@/modules/user/controllers/UserController'
 
@@ -14,6 +15,7 @@ const collectController = new CollectController()
 const addressController = new AddressController()
 const userController = new UserController()
 const reviewController = new ReviewController()
+const noticationController = new NoticationController()
 
 export const controllers = {
   authController,
@@ -23,4 +25,5 @@ export const controllers = {
   addressController,
   userController,
   reviewController,
+  noticationController,
 }

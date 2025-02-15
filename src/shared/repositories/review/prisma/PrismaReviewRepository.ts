@@ -41,4 +41,32 @@ export class PrismaReviewRepository implements IReviewRepository {
       }),
     )
   }
+
+  async getCompanyReviewStats(id: number): Promise<TReviewStats> {
+    const result = await prismaProvider.queryDatabase((prisma) =>
+      prisma.review.aggregate({
+        where: { companyId: id },
+        _avg: { rating: true },
+        _count: { rating: true },
+      }),
+    )
+
+    return {
+      average: result._avg.rating || 0,
+      totalReviews: result._count.rating,
+    }
+  }
+
+  async patchRatingReviewedCompany(id: number, avg: number): Promise<void> {
+    await prismaProvider.queryDatabase((prisma) =>
+      prisma.company.update({
+        where: {
+          id,
+        },
+        data: {
+          rating: avg,
+        },
+      }),
+    )
+  }
 }

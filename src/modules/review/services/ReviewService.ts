@@ -16,6 +16,15 @@ export class ReviewService {
         data.reviewedUserId,
         Number(userStats.average.toFixed(1)),
       )
+    } else {
+      const companyStats = await this.reviewRepository.getCompanyReviewStats(
+        data.companyId!,
+      )
+
+      await this.reviewRepository.patchRatingReviewedCompany(
+        data.companyId!,
+        Number(companyStats.average.toFixed(1)),
+      )
     }
 
     return {
