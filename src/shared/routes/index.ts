@@ -8,6 +8,7 @@ import { addressRouter } from '@/modules/address/routes/addressRouter.routes'
 import { userRouter } from '@/modules/user/routes/userRouter.routes'
 import { reviewRouter } from '@/modules/review/routes/reviewRouter.routes'
 import { notificationRouter } from '@/modules/notification/routes/notificationRouter.routes'
+import { postRouter } from '@/modules/post/routes/postRouter.routes'
 
 const appRouter = express.Router()
 
@@ -19,5 +20,6 @@ appRouter.use('/address', addressRouter)
 appRouter.use('/user', userRouter)
 appRouter.use('/review', reviewRouter)
 appRouter.use('/notification', notificationRouter)
+appRouter.use('/post', postRouter)
 
 export { appRouter }
